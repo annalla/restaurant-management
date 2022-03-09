@@ -7,12 +7,17 @@ public abstract class MenuItem {
     protected String description;
     protected String image;
     protected double price;
+    protected MenuType menuType;
 
     public MenuItem(String name, String description, String image, double price) {
         this.name = name;
         this.description = description;
         this.image = image;
         this.price = price;
+    }
+
+    public MenuType getMenuType() {
+        return menuType;
     }
 
     public MenuItem(MenuItem menu) {
@@ -39,32 +44,56 @@ public abstract class MenuItem {
     }
 
     public void setName(String name) {
-        this.name = (name == null || name.length() == 0) ? this.name : name;
+        if (name != null && name.length() != 0) {
+            this.name = name;
+        }
     }
 
     public void setDescription(String description) {
-        this.description = (description == null || name.length() == 0) ? this.description : description;
+        if (description != null && description.length() != 0) {
+            this.description = description;
+        }
     }
 
     public void setImage(String image) {
-        this.image = (image == null || image.length() == 0) ? this.image : image;
-    }
+        if (image != null && image.length() != 0) {
+            this.image = image;
+        }    }
 
     public void setPrice(double price) {
-        this.price = price < 0 ? this.price : price;
+        if (price >= 0) {
+            this.price = price;
+        }
     }
 
     public void update(String name, String description, String image, double price) {
-        this.name = (name == null || name.length() == 0) ? this.name : name;
-        this.description = (description == null || description.length() == 0) ? this.description : description;
-        this.image = (image == null || image.length() == 0) ? this.image : image;
-        this.price = price < 0 ? this.price : price;
+        if (name != null && name.length() != 0) {
+            this.name = name;
+        }
+        if (description != null && description.length() != 0) {
+            this.description = description;
+        }
+        if (image != null && image.length() != 0) {
+            this.image = image;
+        }
+        if (price >= 0) {
+            this.price = price;
+        }
     }
-    public void updateMenu(MenuItem menu){
-        this.name = (menu.name == null || menu.name.length() == 0) ? this.name : menu.name;
-        this.description = (menu.description == null || menu.name.length() == 0) ? this.description : menu.description;
-        this.image = (menu.image == null || menu.image.length() == 0) ? this.image : menu.image;
-        this.price = menu.price < 0 ? this.price : menu.price;
+
+    public void updateMenu(MenuItem menu) {
+        if (menu.name != null && menu.name.length() != 0) {
+            this.name = menu.name;
+        }
+        if (menu.description != null && menu.description.length() != 0) {
+            this.description = menu.description;
+        }
+        if (menu.image != null && menu.image.length() != 0) {
+            this.image = menu.image;
+        }
+        if (menu.price >= 0) {
+            this.price = menu.price;
+        }
     }
 
     @Override

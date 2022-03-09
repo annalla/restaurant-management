@@ -53,18 +53,19 @@ public class MenuManagement {
 
         switch (type) {
             case AlcoholMenu:
-                menuList.add(new AlcoholMenu(name, des, img, price));
+                menuList.add(new AlcoholMenuItem(name, des, img, price));
                 break;
             case SoftDrinkMenu:
-                menuList.add(new SoftDrinkMenu(name, des, img, price));
+                menuList.add(new SoftDrinkMenuItem(name, des, img, price));
                 break;
             case LunchMenu:
-                menuList.add(new LunchMenu(name, des, img, price));
+                menuList.add(new LunchMenuItem(name, des, img, price));
                 break;
             case BreakfastMenu:
-                menuList.add(new BreakfastMenu(name, des, img, price));
+                menuList.add(new BreakfastMenuItem(name, des, img, price));
+                break;
             case DinnerMenu:
-                menuList.add(new DinnerMenu(name, des, img, price));
+                menuList.add(new DinnerMenuItem(name, des, img, price));
                 break;
         }
         return menuList.size() - 1;
@@ -90,10 +91,47 @@ public class MenuManagement {
      *
      * @param menu  instance of new menu
      * @param index index of menu need to update
+     * @return true if succeeded false if failed
      */
     public boolean updateMenu(MenuItem menu, int index) {
         try {
             menuList.get(index).updateMenu(menu);
+            return true;
+        } catch (IndexOutOfBoundsException e) {
+            logger.fatal("Update menu failed due to " + e);
+            return false;
+        }
+    }
+    public boolean updateMenuName(String name, int index) {
+        try {
+            menuList.get(index).setName(name);
+            return true;
+        } catch (IndexOutOfBoundsException e) {
+            logger.fatal("Update menu failed due to " + e);
+            return false;
+        }
+    }
+    public boolean updateMenuDescription(String description, int index) {
+        try {
+            menuList.get(index).setDescription(description);
+            return true;
+        } catch (IndexOutOfBoundsException e) {
+            logger.fatal("Update menu failed due to " + e);
+            return false;
+        }
+    }
+    public boolean updateMenuImage(String image, int index) {
+        try {
+            menuList.get(index).setImage(image);
+            return true;
+        } catch (IndexOutOfBoundsException e) {
+            logger.fatal("Update menu failed due to " + e);
+            return false;
+        }
+    }
+    public boolean updateMenuPrice(double price, int index) {
+        try {
+            menuList.get(index).setPrice(price);
             return true;
         } catch (IndexOutOfBoundsException e) {
             logger.fatal("Update menu failed due to " + e);
@@ -129,6 +167,35 @@ public class MenuManagement {
         } catch (IndexOutOfBoundsException e) {
             logger.fatal("Get detailed Menu failed due to " + e);
             return null;
+        }
+
+    }
+
+    /**
+     * Get name of menu from index
+     * @param index index of menu in list
+     * @return string name
+     */
+    public String getMenuName(int index) {
+        try {
+            return menuList.get(index).getName();
+        } catch (IndexOutOfBoundsException e) {
+            logger.fatal("Get detailed Menu failed due to " + e);
+            return null;
+        }
+
+    }
+    /**
+     * Get price of menu from index
+     * @param index index of menu in list
+     * @return string name
+     */
+    public double getMenuPrice(int index) {
+        try {
+            return menuList.get(index).getPrice();
+        } catch (IndexOutOfBoundsException e) {
+            logger.fatal("Get detailed Menu failed due to " + e);
+            return -1;
         }
 
     }

@@ -3,7 +3,7 @@ package views;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import utils.MainViewConstant;
+import constants.MainViewConstant;
 
 
 import java.util.Scanner;
@@ -33,7 +33,7 @@ public class MainView {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("Wrong choice!!Select again!!Press any key to continue");
+                        System.out.println("Wrong choice!Press any key to continue");
                         scanner.nextLine();
                 }
 
@@ -41,7 +41,7 @@ public class MainView {
             } catch (RuntimeException e) {
                 logger.fatal("Wrong input choice - " + e);
                 scanner.nextLine();
-                System.out.println("Select again.Press any key to continue");
+                System.out.println("Press any key to continue");
                 scanner.nextLine();
             }
         }

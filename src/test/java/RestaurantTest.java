@@ -4,9 +4,9 @@ import org.junit.Test;
 public class RestaurantTest {
     @Test
     public void test(){
-        MenuItem menuItem =new LunchMenu("a","s","s",3.3);
-        MenuItem menu1=new AlcoholMenu("a","s","s",3.3);
-        MenuItem menu2=new AlcoholMenu("a","s45","45",9.3);
+        MenuItem menuItem =new LunchMenuItem("a","s","s",3.3);
+        MenuItem menu1=new AlcoholMenuItem("a","s","s",3.3);
+        MenuItem menu2=new AlcoholMenuItem("a","s45","45",9.3);
 
         Bill bill=new Bill();
         bill.addMenuItem(menuItem,2);
