@@ -1,8 +1,9 @@
 package models;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class MenuItem {
+public abstract class MenuItem implements Serializable {
     protected String name;
     protected String description;
     protected String image;

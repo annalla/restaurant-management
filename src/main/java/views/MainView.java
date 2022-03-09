@@ -3,45 +3,44 @@ package views;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import constants.MainViewConstant;
+import utils.MainViewConstant;
+import utils.Message;
 
 
 import java.util.Scanner;
 
 public class MainView {
     private static final Logger logger = LogManager.getLogger(MainView.class);
+
     public void displayMainView() {
 
         int choice;
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println("-------------------RESTAURANT-----------------------");
-            System.out.println("1. Menu Management");
-            System.out.println("2. Bill Management");
-            System.out.println("3. Exit");
-            System.out.println("Choice: ");
+            System.out.println(Message.MAIN_VIEW_MENU);
+            System.out.println(Message.INPUT_CHOICE);
             try {
                 choice = scanner.nextInt();
                 switch (choice) {
-                    case MainViewConstant.MENU_MANAGEMENT:
+                    case MainViewConstant.MENU_MANAGEMENT_INDEX:
                         new MenuView().displayMain();
                         break;
-                    case MainViewConstant.BILL_MANAGEMENT:
+                    case MainViewConstant.BILL_MANAGEMENT_INDEX:
                         new BillView().displayMain();
                         break;
-                    case MainViewConstant.EXIT:
+                    case MainViewConstant.EXIT_INDEX:
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("Wrong choice!Press any key to continue");
+                        System.out.println(Message.CHOICE_NOT_EXISTED + "." + Message.PRESS_TO_CONTINUE);
                         scanner.nextLine();
                 }
 
 
             } catch (RuntimeException e) {
-                logger.fatal("Wrong input choice - " + e);
+                logger.fatal("displayMainView() - " + e);
                 scanner.nextLine();
-                System.out.println("Press any key to continue");
+                System.out.println(Message.PRESS_TO_CONTINUE);
                 scanner.nextLine();
             }
         }

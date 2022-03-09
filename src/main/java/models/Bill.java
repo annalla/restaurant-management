@@ -1,9 +1,11 @@
 package models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
 
-public class Bill {
+public class Bill implements Serializable {
 
     private HashMap<MenuItem, Integer> menuItems;
     private LocalDateTime orderedTime;
@@ -15,10 +17,19 @@ public class Bill {
 
     @Override
     public String toString() {
-        return "Bill{" +
-                "menuItems=" + menuItems +
-                ", orderedTime=" + orderedTime +
-                '}';
+        StringBuilder result = new StringBuilder("Bill{" +
+                "orderedTime=" + orderedTime +
+                '}');
+        int i = 0;
+        for (Map.Entry<MenuItem, Integer> entry : menuItems.entrySet()) {
+            result.append("\n").append(i).append(". ").append(entry.getKey().getName()).append("\t\t").append(entry.getValue());
+            i++;
+        }
+        return result.toString();
+    }
+
+    public HashMap<MenuItem, Integer> getMenuItems() {
+        return menuItems;
     }
 
     public Bill(HashMap<MenuItem, Integer> menuItems) {
@@ -31,20 +42,23 @@ public class Bill {
         } else {
             menuItems.put(menuType, quantity);
         }
-        this.orderedTime=LocalDateTime.now();
+        this.orderedTime = LocalDateTime.now();
     }
-    public void deleteMenuItem(MenuItem menuType){
+
+    public void deleteMenuItem(MenuItem menuType) {
         if (menuItems.containsKey(menuType)) {
             menuItems.remove(menuType);
-            this.orderedTime=LocalDateTime.now();
+            this.orderedTime = LocalDateTime.now();
         }
     }
-    public void updateMenuItem(MenuItem menu, int quantity){
+
+    public void updateMenuItem(MenuItem menu, int quantity) {
         if (menuItems.containsKey(menu)) {
             menuItems.replace(menu, quantity);
         } else {
             menuItems.put(menu, quantity);
         }
-        this.orderedTime=LocalDateTime.now();
+        this.orderedTime = LocalDateTime.now();
     }
+
 }

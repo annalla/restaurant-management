@@ -5,8 +5,10 @@ import models.MenuItem;
 import models.MenuType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import constants.MenuViewConstant;
+import utils.MenuViewConstant;
+import utils.Message;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,28 +45,29 @@ public class MenuView {
         }
     }
 
-    public void addAMenu() {
+    public void addAMenuItem() {
 
         String name, description, image;
         double price = 0;
-        System.out.println("1.Add a menu---------------");
+        System.out.println(Message.ADD_A_MENUITEM);
         boolean flag = true;
         int select;
 
         displayMenuType();
-        System.out.println("Choose type of menu:");
+
         while (flag) {
             try {
+                System.out.println(Message.CHOOSE_TYPE_MENU);
                 select = scanner.nextInt();
                 scanner.nextLine();
                 if (menuSelectMenuType.containsKey(select)) {
-                    System.out.println("Input name:");
+                    System.out.println(Message.INPUT_NAME);
                     name = scanner.nextLine();
-                    System.out.println("Input description:");
+                    System.out.println(Message.INPUT_DESCRIPTION);
                     description = scanner.nextLine();
-                    System.out.println("Input image url:");
+                    System.out.println(Message.INPUT_IMAGE_URL);
                     image = scanner.nextLine();
-                    System.out.println("Input price:");
+                    System.out.println(Message.INPUT_PRICE);
                     boolean flag1 = true;
                     while (flag1) {
                         try {
@@ -72,162 +75,179 @@ public class MenuView {
                             scanner.nextLine();
                             flag1 = false;
                         } catch (RuntimeException e) {
-                            logger.fatal(e);
+                            logger.fatal("addAMenuItem() - " + e);
                             scanner.nextLine();
-                            System.out.println("Input price again:");
+                            System.out.println(Message.INPUT_AGAIN);
                         }
                     }
-                    menuManagement.createMenu(menuSelectMenuType.get(select), name, description, image, price);
+                    menuManagement.addMenuItem(menuSelectMenuType.get(select), name, description, image, price);
                     flag = false;
                 } else {
-                    System.out.println("Wrong choice.Select again:");
+                    System.out.println(Message.CHOICE_NOT_EXISTED);
                 }
             } catch (RuntimeException e) {
-                logger.fatal("Wrong input choice - " + e);
-                System.out.println("Select again:");
+                logger.fatal("addAMenuItem() - " + e);
+                System.out.println(Message.SELECT_AGAIN);
                 scanner.nextLine();
             }
         }
 
     }
 
-    public void deleteAMenu() {
-        System.out.println("2.Delete a menu---------------");
+    public void deleteAMenuItem() {
+        System.out.println(Message.DELETE_A_MENUITEM);
         int indexMenu;
-        printMenuList();
-        System.out.println("Input index a menu to delete:");
+        printMenuItemList();
+        System.out.println(Message.INPUT_INDEX_MENU);
         boolean flag = true;
         while (flag) {
             try {
                 indexMenu = scanner.nextInt();
                 MenuItem deletedMenu = menuManagement.deleteMenu(indexMenu);
                 if (deletedMenu == null) {
-                    System.out.println("Delete menu failed due to wrong index.");
+                    System.out.println(Message.FAILED_WRONG_INDEX);
                     if (isContinue()) {
-                        System.out.println("Select again:");
+                        System.out.println(Message.SELECT_AGAIN);
                     } else {
                         flag = false;
                     }
 
                 } else {
-                    System.out.println("Delete menu succeeded");
+                    System.out.println(Message.SUCCESS);
                     stopScreen();
                     scanner.nextLine();
                     flag = false;
                 }
             } catch (RuntimeException e) {
-                logger.fatal(e);
+                logger.fatal("deleteAMenuItem() - " + e);
                 scanner.nextLine();
-                System.out.println("Input again:");
+                System.out.println(Message.INPUT_AGAIN);
             }
         }
     }
 
-    private void updateNameMenu(int selectedMenu) {
+    private void updateNameMenuItem(int selectedMenu) {
         scanner.nextLine();
-        System.out.println("1. Input name");
+        System.out.println(Message.INPUT_NAME);
         String name = scanner.nextLine();
         while (name.length() == 0) {
-            System.out.println("Empty String. Input again:");
+            System.out.println(Message.EMPTY_STRING + "." + Message.INPUT_AGAIN);
             name = scanner.nextLine();
         }
         if (menuManagement.updateMenuName(name, selectedMenu)) {
-            System.out.println("Update name succeeded");
+            System.out.println(Message.SUCCESS);
         } else {
-            System.out.println("Update failed due to wrong index");
+            System.out.println(Message.FAILED_WRONG_INDEX);
         }
     }
-    private void updatePriceMenu(int selectedMenu) {
-        double price=-1;
-        while (price<=-1){
+
+    private void updatePriceMenuItem(int selectedMenu) {
+        double price = -1;
+        while (price <= -1) {
             try {
-                System.out.println("1. Input price (Price>=0)");
+                System.out.println(Message.INPUT_PRICE);
                 price = scanner.nextDouble();
-            }
-            catch (RuntimeException e){
-                logger.fatal(e);
-                System.out.println("Wrong input");
+            } catch (RuntimeException e) {
+                logger.fatal("updatePriceMenuItem() - " + e);
+                System.out.println(Message.WRONG_INPUT);
             }
         }
         if (menuManagement.updateMenuPrice(price, selectedMenu)) {
-            System.out.println("Update price succeeded");
+            System.out.println(Message.SUCCESS);
+
         } else {
-            System.out.println("Update failed due to wrong index");
+            System.out.println(Message.FAILED_WRONG_INDEX);
         }
     }
-    private void updateDescriptionMenu(int selectedMenu) {
+
+    private void updateDescriptionMenuItem(int selectedMenu) {
         scanner.nextLine();
-        System.out.println("1. Input description:");
+        System.out.println(Message.INPUT_DESCRIPTION);
         String description = scanner.nextLine();
         while (description.length() == 0) {
-            System.out.println("Empty String. Input again:");
+            System.out.println(Message.EMPTY_STRING + "." + Message.INPUT_AGAIN);
             description = scanner.nextLine();
         }
         if (menuManagement.updateMenuDescription(description, selectedMenu)) {
-            System.out.println("Update description succeeded");
+            System.out.println(Message.SUCCESS);
         } else {
-            System.out.println("Update failed due to wrong index");
+            System.out.println(Message.FAILED_WRONG_INDEX);
         }
     }
-    private void updateImageMenu(int selectedMenu) {
+
+    private void updateImageMenuItem(int selectedMenu) {
         scanner.nextLine();
-        System.out.println("1. Input image url:");
+        System.out.println(Message.INPUT_IMAGE_URL);
         String image = scanner.nextLine();
         while (image.length() == 0) {
-            System.out.println("Empty String. Input again:");
+            System.out.println(Message.EMPTY_STRING + "." + Message.INPUT_AGAIN);
             image = scanner.nextLine();
         }
         if (menuManagement.updateMenuImage(image, selectedMenu)) {
-            System.out.println("Update image succeeded");
+            System.out.println(Message.SUCCESS);
         } else {
-            System.out.println("Update failed due to wrong index");
+            System.out.println(Message.FAILED_WRONG_INDEX);
         }
     }
 
-    // TODO: 3/8/2022
-    private void updateAMenuWithProperties(int selectedMenu){
-        
+    private void updateAMenuItemWithProperties(int selectedMenu) {
+        scanner.nextLine();
+        boolean flag = true;
+        String properties;
+        while (flag) {
+            System.out.println(Message.INPUT_PROPERTIES);
+            properties = scanner.nextLine();
+            int updatedStatus = menuManagement.updateMenuWithMoreProperties(properties, selectedMenu);
+            if (updatedStatus == 1) {
+                System.out.println(Message.SUCCESS);
+                return;
+            } else if (updatedStatus == 0) {
+                System.out.println(Message.FAILED_WRONG_INDEX);
+            } else {
+                System.out.println(Message.WRONG_FORMAT);
+            }
+            if (!isContinue()) {
+                flag = false;
+            }
+        }
     }
-    public void updateAMenu() {
-        System.out.println("3.Update a menu---------------");
 
-        int selectedMenu = printAMenu();
+    public void updateAMenuItem() {
+        System.out.println(Message.UPDATE_A_MENUITEM);
+
+        int selectedMenu = printAMenuItem();
         int choice;
         boolean flag = true;
 
         while (flag) {
-            System.out.println("1. Update name");
-            System.out.println("2. Update description");
-            System.out.println("3. Update image url");
-            System.out.println("4. Update price");
-            System.out.println("5. Update more than one properties");
-            System.out.println("Input choice:");
+            System.out.println(Message.UPDATE_MENU_ITEM_MENU);
+            System.out.println(Message.INPUT_CHOICE);
             try {
                 choice = scanner.nextInt();
                 switch (choice) {
-                    case MenuViewConstant.UPDATE_NAME:
-                        updateNameMenu(selectedMenu);
+                    case MenuViewConstant.UPDATE_NAME_INDEX:
+                        updateNameMenuItem(selectedMenu);
                         break;
-                    case MenuViewConstant.UPDATE_DESCRIPTION:
-                        updateDescriptionMenu(selectedMenu);
+                    case MenuViewConstant.UPDATE_DESCRIPTION_INDEX:
+                        updateDescriptionMenuItem(selectedMenu);
                         break;
-                    case MenuViewConstant.UPDATE_IMAGE:
-                        updateImageMenu(selectedMenu);
+                    case MenuViewConstant.UPDATE_IMAGE_INDEX:
+                        updateImageMenuItem(selectedMenu);
                         break;
-                    case MenuViewConstant.UPDATE_PRICE:
-                        updatePriceMenu(selectedMenu);
+                    case MenuViewConstant.UPDATE_PRICE_INDEX:
+                        updatePriceMenuItem(selectedMenu);
                         break;
-                    case MenuViewConstant.UPDATE_MORE:
-                        updateAMenuWithProperties(selectedMenu);
+                    case MenuViewConstant.UPDATE_MORE_INDEX:
+                        updateAMenuItemWithProperties(selectedMenu);
                         break;
                     default:
-                        System.out.println("Wrong choice.");
+                        System.out.println(Message.CHOICE_NOT_EXISTED);
                 }
             } catch (RuntimeException e) {
-                logger.fatal(e);
+                logger.fatal("updateAMenuItem() - " + e);
                 scanner.nextLine();
                 if (isContinue()) {
-                    System.out.println("Select again:");
+                    System.out.println(Message.SELECT_AGAIN);
                 } else {
                     flag = false;
                 }
@@ -238,73 +258,118 @@ public class MenuView {
         }
     }
 
-    private int printAMenu() {
+    private int printAMenuItem() {
         int indexMenu = -1;
-        printMenuList();
-        System.out.println("Input index a menu to display:");
+        printMenuItemList();
         boolean flag = true;
         while (flag) {
             try {
+                System.out.println(Message.INPUT_INDEX_MENU);
                 indexMenu = scanner.nextInt();
                 scanner.nextLine();
                 String selectedMenu = menuManagement.displayMenu(indexMenu);
                 if (selectedMenu == null) {
-                    System.out.println("Wrong index");
+                    System.out.println(Message.INDEX_NOT_EXISTED);
                 } else {
                     System.out.println(selectedMenu);
                     flag = false;
                 }
             } catch (RuntimeException e) {
-                logger.fatal(e);
+                logger.fatal("printAMenuItem() - " + e);
                 scanner.nextLine();
-                System.out.println("Input again:");
+                System.out.println(Message.WRONG_INPUT);
             }
         }
         return indexMenu;
     }
 
-    public void displayAMenu() {
-        System.out.println("4.Display a menu---------------");
-        printAMenu();
+    public void displayAMenuItem() {
+        System.out.println(Message.DISPLAY_A_MENUITEM);
+        printAMenuItem();
         stopScreen();
     }
 
-    private void printMenuList() {
+    private void printMenuItemList() {
         for (int i = 0; i < menuManagement.getMenuList().size(); i++) {
             System.out.println(i + ". " + menuManagement.getMenuName(i));
         }
     }
 
-    public void displayMenuList() {
-        System.out.println("5. Display menu's List-------------");
-        printMenuList();
+    public void displayMenuItemList() {
+        System.out.println(Message.DISPLAY_MENUITEM_LIST);
+        printMenuItemList();
         stopScreen();
     }
 
     private boolean isContinue() {
         int select;
-        System.out.println("Press 1 to continue, another key to cancel.");
+        System.out.println(Message.PRESS_1_TO_CONTINUE);
         try {
             select = scanner.nextInt();
-            return select == 1 ? true : false;
+            return select == 1;
         } catch (RuntimeException e) {
-            logger.fatal("isContinue() exception: "+e);
+            logger.fatal("isContinue() - " + e);
             return false;
         }
     }
 
     private void stopScreen() {
-        System.out.println("Press any key to continue");
+        System.out.println(Message.PRESS_TO_CONTINUE);
         scanner.nextLine();
     }
 
-    public void exportAMenuCSV() {
-        System.out.println("6.Export A menu into CSV file---------------");
+    public void exportAMenuItemCSV() {
+        System.out.println(Message.EXPORT_MENUITEM_CSV);
 
     }
 
-    public void importAMenuCSV() {
-        System.out.println("7.Import A menu from CSV file---------------");
+    public void importAMenuItemCSV() {
+        System.out.println(Message.IMPORT_MENUITEM_CSV);
+    }
+
+    public void getMenuItemData() {
+        System.out.println(Message.GET_MENU_ITEMS);
+        try {
+            File f = new File(MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
+            if (!f.exists()) {
+                System.out.println(Message.NO_DATA);
+            }
+            FileInputStream is = new FileInputStream(MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
+            ObjectInputStream ois = new ObjectInputStream(is);
+            List<MenuItem> items = (List<MenuItem>) ois.readObject();
+            menuManagement.setMenuList(items);
+            ois.close();
+            is.close();
+            System.out.println(Message.SUCCESS);
+            stopScreen();
+        } catch (Exception e) {
+            logger.fatal("getMenuItemData() - " + e);
+            System.out.println(Message.GET_DATA_FAILED);
+            stopScreen();
+        }
+
+    }
+
+    public void saveMenuItemData() {
+        System.out.println(Message.SAVE_MENU_ITEMS);
+
+        try {
+            File myObj = new File(MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
+            myObj.createNewFile();
+            FileOutputStream fos = new FileOutputStream(MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            // write object to file
+            oos.writeObject(menuManagement.getMenuList());
+            // closing resources
+            oos.close();
+            fos.close();
+            System.out.println(Message.SUCCESS);
+            stopScreen();
+        } catch (IOException e) {
+            logger.fatal("saveMenuItemData() - " + e);
+            System.out.println(Message.SAVE_DATA_FAILED);
+            stopScreen();
+        }
     }
 
     public void displayMain() {
@@ -316,58 +381,53 @@ public class MenuView {
 
         while (flag) {
 
-            System.out.println("---------Menu Management---------------------");
-            System.out.println("1. Add a menu");
-            System.out.println("2. Delete a menu");
-            System.out.println("3. Update a menu");
-            System.out.println("4. Display a menu");
-            System.out.println("5. Display menu's List");
-            System.out.println("6. Export a menu to CSV file");
-            System.out.println("7. Import a menu from CSV file");
-            System.out.println("8. Get menu data");
-            System.out.println("9. Save menu data");
-            System.out.println("10. Back");
-            System.out.println("11. Exit");
-            System.out.println("Choice: ");
+            System.out.println(Message.MENU_VIEW_MENU);
+            System.out.println(Message.INPUT_CHOICE);
 
             try {
                 choice = scanner.nextInt();
                 scanner.nextLine();
                 switch (choice) {
-                    case MenuViewConstant.ADD_MENU:
-                        addAMenu();
+                    case MenuViewConstant.ADD_MENUITEM_INDEX:
+                        addAMenuItem();
                         break;
-                    case MenuViewConstant.DELETE_MENU:
-                        deleteAMenu();
+                    case MenuViewConstant.DELETE_MENUITEM_INDEX:
+                        deleteAMenuItem();
                         break;
-                    case MenuViewConstant.UPDATE_MENU:
-                        updateAMenu();
+                    case MenuViewConstant.UPDATE_MENUITEM_INDEX:
+                        updateAMenuItem();
                         break;
-                    case MenuViewConstant.DISPLAY_A_MENU:
-                        displayAMenu();
+                    case MenuViewConstant.DISPLAY_A_MENUITEM_INDEX:
+                        displayAMenuItem();
                         break;
-                    case MenuViewConstant.DISPLAY_MENU_LIST:
-                        displayMenuList();
+                    case MenuViewConstant.DISPLAY_MENUITEM_LIST_INDEX:
+                        displayMenuItemList();
                         break;
-                    case MenuViewConstant.EXPORT_A_MENU:
-                        exportAMenuCSV();
+                    case MenuViewConstant.EXPORT_A_MENUITEM_INDEX:
+                        exportAMenuItemCSV();
                         break;
-                    case MenuViewConstant.IMPORT_A_MENU:
-                        importAMenuCSV();
+                    case MenuViewConstant.IMPORT_A_MENUITEM_INDEX:
+                        importAMenuItemCSV();
                         break;
-                    case MenuViewConstant.BACK_MAIN_VIEW:
+                    case MenuViewConstant.SAVE_MENUITEM_DATA_INDEX:
+                        saveMenuItemData();
+                        break;
+                    case MenuViewConstant.GET_MENUITEM_DATA_INDEX:
+                        getMenuItemData();
+                        break;
+                    case MenuViewConstant.BACK_MAIN_VIEW_INDEX:
                         flag = false;
                         break;
-                    case MenuViewConstant.EXIT:
+                    case MenuViewConstant.EXIT_INDEX:
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("Wrong choice!");
+                        System.out.println(Message.CHOICE_NOT_EXISTED);
                         stopScreen();
                 }
 
             } catch (RuntimeException e) {
-                logger.fatal("DisplayMain() - " + e);
+                logger.fatal("displayMain() - " + e);
                 scanner.nextLine();
                 stopScreen();
             }
