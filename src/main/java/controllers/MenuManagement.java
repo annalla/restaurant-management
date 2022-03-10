@@ -13,20 +13,17 @@ public class MenuManagement {
 
     private static final Logger logger = LogManager.getLogger(MenuManagement.class);
 
-    private List<MenuItem> menuList;
+    public static List<MenuItem> menuList;
     public static HashMap<MenuType, List<MenuType>> menu;
 
     public MenuManagement() {
         menuList = new ArrayList<>();
     }
 
-    public void setMenuList(List<MenuItem> menuList) {
-        this.menuList = menuList;
+    public static void setMenuList(List<MenuItem> menuList) {
+        MenuManagement.menuList = new ArrayList<>(menuList);
     }
 
-    public List<MenuItem> getMenuList() {
-        return menuList;
-    }
 
     public static void setUpMenu() {
 
@@ -123,38 +120,20 @@ public class MenuManagement {
      */
     public int updateMenuWithMoreProperties(String properties, int index) {
         try {
-            MenuItem updatedItem = formatPropertiesStringToMenuItem(properties, index);
-            if (updatedItem == null) {
-                return -1;
+            if (menuList.get(index).update(properties)){
+                return 1;
             }
-            menuList.get(index).updateMenu(updatedItem);
-            return 1;
+            return -1;
+//            MenuItem updatedItem = formatPropertiesStringToMenuItem(properties, index);
+//            if (updatedItem == null) {
+//                return -1;
+//            }
+//            menuList.get(index).updateMenu(updatedItem);
+//            return 1;
         } catch (IndexOutOfBoundsException e) {
-            logger.fatal("updateMenu() - " + e);
+            logger.fatal("updateMenuWithMoreProperties() - " + e);
             return 0;
         }
-    }
-
-    private MenuItem formatPropertiesStringToMenuItem(String properties, int index) {
-        String[] items = properties.split("-");
-        double price;
-        if (items.length != 3) {
-            return null;
-        }
-        for (int i = 0; i < items.length; i++) {
-            items[i] = items[i].trim();
-        }
-        try {
-            price = Double.parseDouble(items[items.length - 1]);
-            if (price < 0) {
-                return null;
-            }
-        } catch (RuntimeException e) {
-            logger.fatal("formatPropertiesStringToMenuItem() - " + e);
-            return null;
-        }
-        menuList.get(index).update(items[0], items[1], items[2], price);
-        return menuList.get(index);
     }
 
     public boolean updateMenuName(String name, int index) {
@@ -229,20 +208,25 @@ public class MenuManagement {
 
     }
 
-    /**
-     * Get name of menu from index
-     *
-     * @param index index of menu in list
-     * @return string name
-     */
-    public String getMenuName(int index) {
+
+    public static String getBasicMenuInfo(int index) {
         try {
-            return menuList.get(index).getName();
+            MenuItem menuItem = menuList.get(index);
+            return menuItem.getBasicInfor();
         } catch (IndexOutOfBoundsException e) {
             logger.fatal("Get detailed Menu failed due to " + e);
             return null;
         }
 
+    }
+
+    public static boolean checkMenuData() {
+        try {
+            return menuList.size() != 0;
+        }
+        catch (RuntimeException e){
+            return false;
+        }
     }
 
     /**

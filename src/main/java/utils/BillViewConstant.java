@@ -16,4 +16,5 @@ public class BillViewConstant {
     public static final int UPDATE_BY_ADD_MENUITEM_INDEX = 1;
     public static final int UPDATE_BY_DELETE_MENUITEM_INDEX = 2;
     public static final int UPDATE_QUANTITY_MENUITEM_INDEX = 3;
+    public static final int UPDATE_BACK = 4;
 }

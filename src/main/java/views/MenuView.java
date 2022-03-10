@@ -18,7 +18,7 @@ public class MenuView {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static MenuManagement menuManagement = new MenuManagement();
+    private MenuManagement menuManagement = new MenuManagement();
 
     private static final Logger logger = LogManager.getLogger(MenuView.class);
 
@@ -63,21 +63,29 @@ public class MenuView {
                 if (menuSelectMenuType.containsKey(select)) {
                     System.out.println(Message.INPUT_NAME);
                     name = scanner.nextLine();
+                    while (name.length() == 0) {
+                        System.out.println(Message.EMPTY_STRING + "." + Message.INPUT_AGAIN);
+                        name = scanner.nextLine();
+                    }
                     System.out.println(Message.INPUT_DESCRIPTION);
                     description = scanner.nextLine();
                     System.out.println(Message.INPUT_IMAGE_URL);
                     image = scanner.nextLine();
-                    System.out.println(Message.INPUT_PRICE);
                     boolean flag1 = true;
                     while (flag1) {
+                        System.out.println(Message.INPUT_PRICE);
                         try {
                             price = scanner.nextDouble();
                             scanner.nextLine();
-                            flag1 = false;
+                            if (price >= 0) {
+                                flag1 = false;
+                            } else {
+                                System.out.println(Message.INVALID_VALUE);
+                            }
                         } catch (RuntimeException e) {
                             logger.fatal("addAMenuItem() - " + e);
                             scanner.nextLine();
-                            System.out.println(Message.INPUT_AGAIN);
+                            System.out.println(Message.WRONG_INPUT);
                         }
                     }
                     menuManagement.addMenuItem(menuSelectMenuType.get(select), name, description, image, price);
@@ -87,7 +95,7 @@ public class MenuView {
                 }
             } catch (RuntimeException e) {
                 logger.fatal("addAMenuItem() - " + e);
-                System.out.println(Message.SELECT_AGAIN);
+                System.out.println(Message.WRONG_INPUT + "." + Message.SELECT_AGAIN);
                 scanner.nextLine();
             }
         }
@@ -98,17 +106,16 @@ public class MenuView {
         System.out.println(Message.DELETE_A_MENUITEM);
         int indexMenu;
         printMenuItemList();
-        System.out.println(Message.INPUT_INDEX_MENU);
+
         boolean flag = true;
         while (flag) {
+            System.out.println(Message.INPUT_INDEX_MENU);
             try {
                 indexMenu = scanner.nextInt();
                 MenuItem deletedMenu = menuManagement.deleteMenu(indexMenu);
                 if (deletedMenu == null) {
                     System.out.println(Message.FAILED_WRONG_INDEX);
-                    if (isContinue()) {
-                        System.out.println(Message.SELECT_AGAIN);
-                    } else {
+                    if (!isContinue()) {
                         flag = false;
                     }
 
@@ -121,7 +128,7 @@ public class MenuView {
             } catch (RuntimeException e) {
                 logger.fatal("deleteAMenuItem() - " + e);
                 scanner.nextLine();
-                System.out.println(Message.INPUT_AGAIN);
+                System.out.println(Message.WRONG_INPUT);
             }
         }
     }
@@ -150,6 +157,7 @@ public class MenuView {
             } catch (RuntimeException e) {
                 logger.fatal("updatePriceMenuItem() - " + e);
                 System.out.println(Message.WRONG_INPUT);
+                scanner.nextLine();
             }
         }
         if (menuManagement.updateMenuPrice(price, selectedMenu)) {
@@ -240,21 +248,20 @@ public class MenuView {
                     case MenuViewConstant.UPDATE_MORE_INDEX:
                         updateAMenuItemWithProperties(selectedMenu);
                         break;
+                    case MenuViewConstant.UPDATE_BACK:
+                        flag=false;
+                        break;
                     default:
                         System.out.println(Message.CHOICE_NOT_EXISTED);
                 }
             } catch (RuntimeException e) {
                 logger.fatal("updateAMenuItem() - " + e);
                 scanner.nextLine();
-                if (isContinue()) {
-                    System.out.println(Message.SELECT_AGAIN);
-                } else {
-                    flag = false;
-                }
+               System.out.println(Message.WRONG_INPUT);
             }
-            if (!isContinue()) {
-                flag = false;
-            }
+//            if (!isContinue()) {
+//                flag = false;
+//            }
         }
     }
 
@@ -290,8 +297,13 @@ public class MenuView {
     }
 
     private void printMenuItemList() {
-        for (int i = 0; i < menuManagement.getMenuList().size(); i++) {
-            System.out.println(i + ". " + menuManagement.getMenuName(i));
+        if(!menuManagement.checkMenuData()){
+            System.out.println(Message.NO_DATA);
+            return;
+        }
+        System.out.println(Message.HEADER_MENU_LIST);
+        for (int i = 0; i < MenuManagement.menuList.size(); i++) {
+            System.out.println(i + "\t\t\t" + menuManagement.getBasicMenuInfo(i));
         }
     }
 
@@ -302,13 +314,14 @@ public class MenuView {
     }
 
     private boolean isContinue() {
-        int select;
+        String select;
         System.out.println(Message.PRESS_1_TO_CONTINUE);
         try {
-            select = scanner.nextInt();
-            return select == 1;
+            select = scanner.nextLine();
+            return select.equals("1");
         } catch (RuntimeException e) {
             logger.fatal("isContinue() - " + e);
+            scanner.nextLine();
             return false;
         }
     }
@@ -337,7 +350,7 @@ public class MenuView {
             FileInputStream is = new FileInputStream(MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
             ObjectInputStream ois = new ObjectInputStream(is);
             List<MenuItem> items = (List<MenuItem>) ois.readObject();
-            menuManagement.setMenuList(items);
+            MenuManagement.setMenuList(items);
             ois.close();
             is.close();
             System.out.println(Message.SUCCESS);
@@ -359,7 +372,7 @@ public class MenuView {
             FileOutputStream fos = new FileOutputStream(MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             // write object to file
-            oos.writeObject(menuManagement.getMenuList());
+            oos.writeObject(MenuManagement.menuList);
             // closing resources
             oos.close();
             fos.close();

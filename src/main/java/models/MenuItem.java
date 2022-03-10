@@ -11,10 +11,10 @@ public abstract class MenuItem implements Serializable {
     protected MenuType menuType;
 
     public MenuItem(String name, String description, String image, double price) {
-        this.name = name;
+        this.name = name == null ? "" : name;
         this.description = description;
         this.image = image;
-        this.price = price;
+        this.price = price < 0 ? 0 : price;
     }
 
     public MenuType getMenuType() {
@@ -22,10 +22,10 @@ public abstract class MenuItem implements Serializable {
     }
 
     public MenuItem(MenuItem menu) {
-        this.name = menu.name;
+        this.name = menu.name == null ? "" : menu.name;
         this.description = menu.description;
         this.image = menu.description;
-        this.price = menu.price;
+        this.price = menu.price < 0 ? 0 : menu.price;
     }
 
     public String getName() {
@@ -59,7 +59,8 @@ public abstract class MenuItem implements Serializable {
     public void setImage(String image) {
         if (image != null && image.length() != 0) {
             this.image = image;
-        }    }
+        }
+    }
 
     public void setPrice(double price) {
         if (price >= 0) {
@@ -118,5 +119,30 @@ public abstract class MenuItem implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(name, description, image, price);
+    }
+
+    public String getBasicInfor() {
+        return name + "\t\t\t" + getMenuType() + "\t\t\t" + price;
+    }
+
+    public boolean update(String properties) {
+        String[] items = properties.split("-");
+        double price;
+        if (items.length != 4) {
+            return false;
+        }
+        for (int i = 0; i < items.length; i++) {
+            items[i] = items[i].trim();
+        }
+        try {
+            price = Double.parseDouble(items[items.length - 1]);
+            if (price < 0) {
+                return false;
+            }
+        } catch (RuntimeException e) {
+            return false;
+        }
+        update(items[0], items[1], items[2], price);
+        return true;
     }
 }

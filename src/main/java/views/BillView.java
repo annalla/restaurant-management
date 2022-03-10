@@ -1,6 +1,7 @@
 package views;
 
 import controllers.BillManagement;
+import controllers.MenuManagement;
 import models.Bill;
 import models.MenuItem;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,7 @@ import java.util.Scanner;
 public class BillView {
     private static final Logger logger = LogManager.getLogger(BillView.class);
     private static final Scanner scanner = new Scanner(System.in);
-    public static BillManagement billManagement = new BillManagement();
+    private BillManagement billManagement = new BillManagement();
 
     public void addBill() {
         System.out.println(Message.ADD_A_BILL);
@@ -30,6 +31,7 @@ public class BillView {
         boolean flag = true;
         int addStatus;
         String input;
+        scanner.nextLine();
         while (flag) {
             System.out.println(Message.INPUT_MENU_TO_ADD_INTO_BILL);
             input = scanner.nextLine();
@@ -39,9 +41,13 @@ public class BillView {
             } else if (addStatus == 0) {
                 System.out.println(Message.INDEX_OUT_OF_BOUND);
             }
+            else {
+                System.out.println(Message.SUCCESS);
+            }
             if (!isContinue()) {
                 flag = false;
             }
+
         }
     }
 
@@ -51,11 +57,11 @@ public class BillView {
     }
 
     private boolean isContinue() {
-        int select;
+        String select;
         System.out.println(Message.PRESS_1_TO_CONTINUE);
         try {
-            select = scanner.nextInt();
-            return select == 1;
+            select = scanner.nextLine();
+            return select.equals("1");
         } catch (RuntimeException e) {
             logger.fatal("isContinue() - " + e);
             return false;
@@ -66,35 +72,34 @@ public class BillView {
         System.out.println(Message.DELETE_A_BILL);
         int indexBill;
         printBillList();
-        System.out.println(Message.INPUT_INDEX_BILL);
+
         boolean flag = true;
         while (flag) {
+            System.out.println(Message.INPUT_INDEX_BILL);
             try {
                 indexBill = scanner.nextInt();
                 Bill deletedBill = billManagement.deleteBill(indexBill);
                 if (deletedBill == null) {
                     System.out.println(Message.FAILED_WRONG_INDEX);
-                    if (isContinue()) {
-                        System.out.println(Message.SELECT_AGAIN);
-                    } else {
-                        flag = false;
+                    if (!isContinue()) {
+                        flag=false;
                     }
                 } else {
                     System.out.println(Message.SUCCESS);
-                    stopScreen();
                     scanner.nextLine();
+                    stopScreen();
                     flag = false;
                 }
             } catch (RuntimeException e) {
                 logger.fatal("deleteBill() - " + e);
                 scanner.nextLine();
-                System.out.println(Message.INPUT_AGAIN);
+                System.out.println(Message.WRONG_INPUT);
             }
         }
     }
-    public void updateBill(){
-        System.out.println(Message.UPDATE_A_BILL);
 
+    public void updateBill() {
+        System.out.println(Message.UPDATE_A_BILL);
         int selectedBill = printBill();
         int choice;
         boolean flag = true;
@@ -114,6 +119,9 @@ public class BillView {
                     case BillViewConstant.UPDATE_QUANTITY_MENUITEM_INDEX:
                         updateQuantityMenuItem(selectedBill);
                         break;
+                    case BillViewConstant.UPDATE_BACK:
+                        flag=false;
+                        break;
                     default:
                         System.out.println(Message.CHOICE_NOT_EXISTED);
                 }
@@ -121,28 +129,31 @@ public class BillView {
                 logger.fatal("updateBill() - " + e);
                 scanner.nextLine();
             }
-            if (!isContinue()) {
-                flag = false;
-            }
         }
     }
 
     private void updateQuantityMenuItem(int selectedBill) {
+
         boolean flag = true;
-        int addStatus;
+        int updatedStatus;
         String input;
+        scanner.nextLine();
         while (flag) {
             System.out.println(Message.INPUT_MENU_TO_ADD_INTO_BILL);
             input = scanner.nextLine();
-//            addStatus = billManagement.addMenuItemIntoBill(input, selectedBill);
-//            if (addStatus == -1) {
-//                System.out.println(Message.WRONG_FORMAT);
-//            } else if (addStatus == 0) {
-//                System.out.println(Message.INDEX_OUT_OF_BOUND);
-//            }
-//            if (!isContinue()) {
-//                flag = false;
-//            }
+            updatedStatus = billManagement.updateBillByUpdateItem(input, selectedBill);
+            if (updatedStatus == -1) {
+                System.out.println(Message.WRONG_FORMAT);
+            } else if (updatedStatus == 0) {
+                System.out.println(Message.INDEX_OUT_OF_BOUND);
+            }
+            else {
+                System.out.println(Message.SUCCESS);
+                System.out.println(billManagement.displayBill(selectedBill));
+            }
+            if (!isContinue()) {
+                flag = false;
+            }
         }
     }
 
@@ -153,14 +164,14 @@ public class BillView {
             try {
                 System.out.println(Message.INPUT_INDEX_ITEM_IN_BILL);
                 indexItem = scanner.nextInt();
-                if(billManagement.updateBillByDeleteItem(indexItem,selectedBill)){
+                if (billManagement.updateBillByDeleteItem(indexItem, selectedBill)) {
                     System.out.println(Message.SUCCESS);
-                    flag=false;
-                }
-                else{
+                    System.out.println(billManagement.displayBill(selectedBill));
+                    flag = false;
+                } else {
                     System.out.println(Message.FAILED_WRONG_INDEX);
-                    if(!isContinue()){
-                        flag=false;
+                    if (!isContinue()) {
+                        flag = false;
                     }
                 }
             } catch (RuntimeException e) {
@@ -171,11 +182,13 @@ public class BillView {
     }
 
     private void updateByAddMenuItem(int selectedBill) {
+        displayMenuList();
         addMenuItemIntoBill(selectedBill);
+        System.out.println(billManagement.displayBill(selectedBill));
     }
 
-    private int printBill(){
-        int indexBill=-1;
+    private int printBill() {
+        int indexBill = -1;
         printBillList();
         boolean flag = true;
         while (flag) {
@@ -187,8 +200,6 @@ public class BillView {
                     System.out.println(Message.FAILED_WRONG_INDEX);
                 } else {
                     System.out.println(selectedBill);
-                    stopScreen();
-                    scanner.nextLine();
                     flag = false;
                 }
             } catch (RuntimeException e) {
@@ -199,34 +210,47 @@ public class BillView {
         }
         return indexBill;
     }
+
     public void displayBill() {
         System.out.println(Message.DISPLAY_A_BILL);
-       printBill();
-       stopScreen();
+        printBill();
+        scanner.nextLine();
+        stopScreen();
     }
 
     private void printBillList() {
-        for (int i = 0; i < billManagement.getBills().size(); i++) {
-            System.out.println(i + ". " + billManagement.displayBill(i));
+        for (int i = 0; i < BillManagement.bills.size(); i++) {
+            System.out.println(i + ". " + billManagement.displayBillInfo(i));
         }
     }
 
     public void displayBillList() {
+        scanner.nextLine();
         System.out.println(Message.DISPLAY_BILL_LIST);
         printBillList();
         stopScreen();
     }
 
     private void displayMenuList() {
-        for (int i = 0; i < MenuView.menuManagement.getMenuList().size(); i++) {
-            System.out.println(i + ". " + MenuView.menuManagement.getMenuName(i) + "\t\t:\t" + MenuView.menuManagement.getMenuPrice(i));
+        if (!MenuManagement.checkMenuData()) {
+            System.out.println(Message.NO_DATA);
+            return;
+        }
+        System.out.println(Message.HEADER_MENU_LIST);
+        for (int i = 0; i < MenuManagement.menuList.size(); i++) {
+            System.out.println(i + ".\t\t\t" + MenuManagement.getBasicMenuInfo(i));
         }
     }
 
     public void displayMain() {
         int choice;
         boolean flag = true;
-        Scanner scanner = new Scanner(System.in);
+        if (!MenuManagement.checkMenuData()) {
+            System.out.println(Message.NO_DATA_MENU);
+            stopScreen();
+            new MenuView().displayMain();
+            return;
+        }
         while (flag) {
             System.out.println(Message.BILL_VIEW_MENU);
             System.out.println(Message.INPUT_CHOICE);
@@ -283,12 +307,13 @@ public class BillView {
             FileOutputStream fos = new FileOutputStream(BillViewConstant.FILE_NAME_BILL_DATA);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             // write object to file
-            oos.writeObject(billManagement.getBills());
+            oos.writeObject(BillManagement.bills);
             // closing resources
             oos.close();
             fos.close();
             System.out.println(Message.SUCCESS);
             stopScreen();
+            scanner.nextLine();
         } catch (IOException e) {
             logger.fatal("saveBillData() - " + e);
             System.out.println(Message.SAVE_DATA_FAILED);
@@ -310,11 +335,14 @@ public class BillView {
             ois.close();
             is.close();
             System.out.println(Message.SUCCESS);
+            scanner.nextLine();
             stopScreen();
         } catch (Exception e) {
             logger.fatal("getBillData() - " + e);
+            scanner.nextLine();
             System.out.println(Message.GET_DATA_FAILED);
             stopScreen();
+
         }
 
     }

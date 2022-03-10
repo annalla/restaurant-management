@@ -34,12 +34,14 @@ public class MainView {
                     default:
                         System.out.println(Message.CHOICE_NOT_EXISTED + "." + Message.PRESS_TO_CONTINUE);
                         scanner.nextLine();
+                        scanner.nextLine();
                 }
 
 
             } catch (RuntimeException e) {
                 logger.fatal("displayMainView() - " + e);
                 scanner.nextLine();
+                System.out.println(Message.WRONG_INPUT);
                 System.out.println(Message.PRESS_TO_CONTINUE);
                 scanner.nextLine();
             }

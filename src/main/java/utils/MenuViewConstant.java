@@ -20,5 +20,6 @@ public class MenuViewConstant {
     public static final int UPDATE_IMAGE_INDEX = 3;
     public static final int UPDATE_PRICE_INDEX = 4;
     public static final int UPDATE_MORE_INDEX = 5;
+    public static final int UPDATE_BACK = 6;
 
 }

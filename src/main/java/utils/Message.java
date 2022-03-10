@@ -3,8 +3,8 @@ package utils;
 public class Message {
 
     public static final String MAIN_VIEW_MENU = "-------------------RESTAURANT-----------------------\n1. Menu Management\n2. Bill Management\n3. Exit";
-    public static final String BILL_VIEW_MENU = "---------Bill Management---------------------\n1. Add a bill\n2. Delete a bill\n3. Update a bill\n4. Display a bill\n5.Display a bill's list\n6. Get bill data\n7. Save bill data\n8. Back\n9. Exit";
-    public static final String MENU_VIEW_MENU = "---------Menu Management---------------------\n1. Add a menu item\n2. Delete a menu item\n3. Update a menu item\n4. Display a menu item\n5.Display a menu's list\n6.Export a menu item to CSV file\n7. Import a menu item to CSV file\n8. Get menu data\n9. Save menu data\n10. Back\n11. Exit";
+    public static final String BILL_VIEW_MENU = "---------Bill Management---------------------\n1. Add a bill\n2. Delete a bill\n3. Update a bill\n4. Display a bill\n5. Display a bill's list\n6. Get bill data\n7. Save bill data\n8. Back\n9. Exit";
+    public static final String MENU_VIEW_MENU = "---------Menu Management---------------------\n1. Add a menu item\n2. Delete a menu item\n3. Update a menu item\n4. Display a menu item\n5. Display a menu's list\n6. Export a menu item to CSV file\n7. Import a menu item to CSV file\n8. Get menu data\n9. Save menu data\n10. Back\n11. Exit";
 
     public static final String ADD_A_BILL = "1. Add a bill---------------------------";
     public static final String DELETE_A_BILL = "2. Delete a bill---------------------------";
@@ -13,7 +13,7 @@ public class Message {
     public static final String DISPLAY_BILL_LIST = "5. Display bill's list---------------------------";
     public static final String GET_BILLS = "6. Get bill data---------------------------";
     public static final String SAVE_BILLS = "7. Save bill data---------------------------";
-    public static final String UPDATE_BILL_MENU = "1. Update by add new menu item\n 2. Update by delete item\n 3. Update by modify quantity of item";
+    public static final String UPDATE_BILL_MENU = "1. Update by add new menu item\n2. Update by delete item\n3. Update by modify quantity of item\n4. Back";
 
 
     public static final String ADD_A_MENUITEM = "1. Add a menu item---------------------------";
@@ -25,13 +25,15 @@ public class Message {
     public static final String IMPORT_MENUITEM_CSV = "5. Import a menu item to CSV file---------------------------";
     public static final String GET_MENU_ITEMS = "8. Get menu data---------------------------";
     public static final String SAVE_MENU_ITEMS = "9. Save menu data---------------------------";
-    public static final String UPDATE_MENU_ITEM_MENU = "1. Update name\n 2. Update description\n 3. Update image url\n4. Update price\n5. Update more than one property ";
+    public static final String UPDATE_MENU_ITEM_MENU = "1. Update name\n2. Update description\n3.Update image url\n4.Update price\n5. Update more than one property\n6. Back ";
+    public static final String HEADER_MENU_LIST = "index\t\tname\t\tMenuType\t\tprice";
 
     public static final String SUCCESS = "Succeeded";
     public static final String FAILED = "Failed";
     public static final String SAVE_DATA_FAILED = "Save data failed";
     public static final String GET_DATA_FAILED = "Get data failed";
     public static final String NO_DATA = "No data";
+    public static final String NO_DATA_MENU = "No data menu items. You should add menu";
     public static final String FAILED_WRONG_INDEX = "Failed due to wrong index";
 
     public static final String CHOICE_NOT_EXISTED = "Choice is not existed";
@@ -56,6 +58,8 @@ public class Message {
     public static final String WRONG_FORMAT = "Wrong format";
     public static final String INPUT_MENU_TO_ADD_INTO_BILL = "Select index of menu items and quantity(format index-quantity(quantity>0).example: 0-3):";
     public static final String INDEX_OUT_OF_BOUND = "Index out of bound";
+    public static final String INVALID_VALUE = "Invalid value";
+
 
     public static final String PRESS_TO_CONTINUE = "Press any key to continue";
     public static final String PRESS_1_TO_CONTINUE = "Press 1 to continue, another key to cancel.";
