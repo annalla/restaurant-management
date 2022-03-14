@@ -1,7 +1,5 @@
 package utils;
 
-import java.io.File;
-
 public class MenuViewConstant {
     public static final String FILE_NAME_MENU_ITEM_DATA="menu_item_list.bin";
     public static final int ADD_MENUITEM_INDEX = 1;

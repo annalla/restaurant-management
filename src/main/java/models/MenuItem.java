@@ -3,6 +3,9 @@ package models;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Class of Information of a menu item (name,description, image url and price)
+ */
 public abstract class MenuItem implements Serializable {
     protected String name;
     protected String description;
@@ -19,13 +22,6 @@ public abstract class MenuItem implements Serializable {
 
     public MenuType getMenuType() {
         return menuType;
-    }
-
-    public MenuItem(MenuItem menu) {
-        this.name = menu.name == null ? "" : menu.name;
-        this.description = menu.description;
-        this.image = menu.description;
-        this.price = menu.price < 0 ? 0 : menu.price;
     }
 
     public String getName() {
@@ -68,6 +64,14 @@ public abstract class MenuItem implements Serializable {
         }
     }
 
+    /**
+     * update menu item
+     *
+     * @param name string name need to update
+     * @param description description need to update
+     * @param image image need to update
+     * @param price price need to update
+     */
     public void update(String name, String description, String image, double price) {
         if (name != null && name.length() != 0) {
             this.name = name;
@@ -83,6 +87,11 @@ public abstract class MenuItem implements Serializable {
         }
     }
 
+    /**
+     * update menu item
+     *
+     * @param menu updated MenuItem
+     */
     public void updateMenu(MenuItem menu) {
         if (menu.name != null && menu.name.length() != 0) {
             this.name = menu.name;
@@ -125,6 +134,11 @@ public abstract class MenuItem implements Serializable {
         return name + "\t\t\t" + getMenuType() + "\t\t\t" + price;
     }
 
+    /**
+     * update a menu base one a string of properties {name}-{description}-{image url}-{image}
+     * @param properties a string of properties {name}-{description}-{image url}-{image}
+     * @return true if update succeeded, false of if wrong format
+     */
     public boolean update(String properties) {
         String[] items = properties.split("-");
         double price;

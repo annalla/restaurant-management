@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * Class of DrinkMenuItem (kind of MenuItem)
+ */
 public abstract class DrinkMenuItem extends MenuItem {
     protected final MenuType menuType=MenuType.DrinkMenu;
 

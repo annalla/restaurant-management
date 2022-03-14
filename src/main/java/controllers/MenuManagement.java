@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
+/**
+ * Class of MenuManagement: manage(add, delete, update, display) menu items in program
+ *
+ */
 public class MenuManagement {
 
     private static final Logger logger = LogManager.getLogger(MenuManagement.class);
@@ -124,18 +127,19 @@ public class MenuManagement {
                 return 1;
             }
             return -1;
-//            MenuItem updatedItem = formatPropertiesStringToMenuItem(properties, index);
-//            if (updatedItem == null) {
-//                return -1;
-//            }
-//            menuList.get(index).updateMenu(updatedItem);
-//            return 1;
         } catch (IndexOutOfBoundsException e) {
             logger.fatal("updateMenuWithMoreProperties() - " + e);
             return 0;
         }
     }
 
+    /**
+     * update menu name
+     *
+     * @param name name need to updated
+     * @param index index of menu in list
+     * @return true if update successfully. false if index not existed
+     */
     public boolean updateMenuName(String name, int index) {
         try {
             menuList.get(index).setName(name);
@@ -146,6 +150,13 @@ public class MenuManagement {
         }
     }
 
+    /**
+     * update menu description
+     *
+     * @param description description need to updated
+     * @param index index of menu in list
+     * @return true if update successfully. false if index not existed
+     */
     public boolean updateMenuDescription(String description, int index) {
         try {
             menuList.get(index).setDescription(description);
@@ -156,6 +167,13 @@ public class MenuManagement {
         }
     }
 
+    /**
+     * update menu image
+     *
+     * @param image image need to updated
+     * @param index index of menu in list
+     * @return true if update successfully. false if index not existed
+     */
     public boolean updateMenuImage(String image, int index) {
         try {
             menuList.get(index).setImage(image);
@@ -166,6 +184,13 @@ public class MenuManagement {
         }
     }
 
+    /**
+     * update menu price
+     *
+     * @param price price need to updated
+     * @param index index of menu in list
+     * @return true if update successfully. false if index not existed
+     */
     public boolean updateMenuPrice(double price, int index) {
         try {
             menuList.get(index).setPrice(price);
@@ -207,7 +232,6 @@ public class MenuManagement {
         }
 
     }
-
 
     public static String getBasicMenuInfo(int index) {
         try {

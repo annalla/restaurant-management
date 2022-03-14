@@ -1,7 +1,5 @@
 package utils;
 
-import java.io.File;
-
 public class BillViewConstant {
     public static final String FILE_NAME_BILL_DATA = "bill_list.bin";
     public static final int ADD_BILL_INDEX = 1;

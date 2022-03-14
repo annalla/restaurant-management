@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * Class of SoftDrinkMenuItem (kind of DrinkMenuItem)
+ */
 public class SoftDrinkMenuItem extends DrinkMenuItem {
     protected final MenuType menuType=MenuType.SoftDrinkMenu;
 

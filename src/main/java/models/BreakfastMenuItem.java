@@ -1,5 +1,7 @@
 package models;
-
+/**
+ * Class of BreakfastMenuItem (kind of FoodMenuItem)
+ */
 public class BreakfastMenuItem extends FoodMenuItem {
     protected final MenuType menuType=MenuType.BreakfastMenu;
 

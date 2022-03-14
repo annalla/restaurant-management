@@ -7,15 +7,25 @@ import utils.MainViewConstant;
 import utils.Message;
 
 
-import java.util.Scanner;
+import static utils.ScreenUtility.scanner;
 
+/**
+ * The class of MainView: View of main view
+ *
+ * @see BillView
+ * @see MenuView
+ */
 public class MainView {
     private static final Logger logger = LogManager.getLogger(MainView.class);
+    public static final String dataDirectory = System.getProperty("user.dir") + MainViewConstant.FOLDER_NAME_DATA;
 
+    /**
+     * Display main view of program
+     *
+     */
     public void displayMainView() {
 
         int choice;
-        Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println(Message.MAIN_VIEW_MENU);
             System.out.println(Message.INPUT_CHOICE);
@@ -47,4 +57,5 @@ public class MainView {
             }
         }
     }
+
 }

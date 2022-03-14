@@ -1,5 +1,7 @@
 package models;
-
+/**
+ * Class of AlcoholMenuItem (kind of DrinkMenuItem)
+ */
 public class AlcoholMenuItem extends DrinkMenuItem {
 
     protected final MenuType menuType=MenuType.AlcoholMenu;

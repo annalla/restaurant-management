@@ -25,8 +25,8 @@ public class Message {
     public static final String IMPORT_MENUITEM_CSV = "5. Import a menu item to CSV file---------------------------";
     public static final String GET_MENU_ITEMS = "8. Get menu data---------------------------";
     public static final String SAVE_MENU_ITEMS = "9. Save menu data---------------------------";
-    public static final String UPDATE_MENU_ITEM_MENU = "1. Update name\n2. Update description\n3.Update image url\n4.Update price\n5. Update more than one property\n6. Back ";
-    public static final String HEADER_MENU_LIST = "index\t\tname\t\tMenuType\t\tprice";
+    public static final String UPDATE_MENU_ITEM_MENU = "1. Update name\n2. Update description\n3. Update image url\n4. Update price\n5. Update more than one property\n6. Back ";
+    public static final String HEADER_MENU_LIST = "index\t\tname\t\t\tMenuType\t\t\tprice";
 
     public static final String SUCCESS = "Succeeded";
     public static final String FAILED = "Failed";
@@ -35,6 +35,7 @@ public class Message {
     public static final String NO_DATA = "No data";
     public static final String NO_DATA_MENU = "No data menu items. You should add menu";
     public static final String FAILED_WRONG_INDEX = "Failed due to wrong index";
+    public static final String CREATED_FILE_FAILED = "Created file failed";
 
     public static final String CHOICE_NOT_EXISTED = "Choice is not existed";
     public static final String INPUT_CHOICE = "Input choice: ";

@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Class of bill information (orderedTime, menu item and quantity of each)
+ *
+ */
 public class Bill implements Serializable {
 
     private Map<MenuItem, Integer> menuItems;
@@ -36,40 +40,25 @@ public class Bill implements Serializable {
         this.menuItems = menuItems;
     }
 
-    public void addMenuItem(MenuItem menuType, int quantity) {
-        if (menuItems.containsKey(menuType)) {
-            menuItems.replace(menuType, menuItems.get(menuType) + quantity);
+    /**
+     * add menu item into bill
+     *
+     * @param menuItem MenuItem need to add
+     * @param quantity quantity od menu item
+     */
+    public void addMenuItem(MenuItem menuItem, int quantity) {
+        if (menuItems.containsKey(menuItem)) {
+            menuItems.replace(menuItem, menuItems.get(menuItem) + quantity);
         } else {
-            menuItems.put(menuType, quantity);
+            menuItems.put(menuItem, quantity);
         }
         this.orderedTime = LocalDateTime.now();
-    }
-
-    public boolean deleteMenuItem(MenuItem deletedItem) {
-        if (menuItems.containsKey(deletedItem)) {
-            menuItems.remove(deletedItem);
-            this.orderedTime = LocalDateTime.now();
-            return true;
-        }
-        return false;
-    }
-
-    public void updateMenuItem(MenuItem menu, int quantity) {
-        if (menuItems.containsKey(menu)) {
-            menuItems.replace(menu, quantity);
-        } else {
-            menuItems.put(menu, quantity);
-        }
-        this.orderedTime = LocalDateTime.now();
-    }
-
-    public String getInfo() {
-        return "Bill{" + "orderedTime=" + orderedTime + "}";
     }
 
     /**
+     * add menu item into bill with string {index}-{quantity}
      *
-     * @param menuItem string index of menu + quantity of menuitem {index}-{quantity}
+     * @param menuItem string index of menu + quantity of menuitem {index}-{quantity} with index is index of menu item in menu list
      * @param menuItemList List of MenuItem
      * @return 1 add succeeded, 0: index of Menu out of bound in menu list, -1: wrong format string
      */
@@ -84,6 +73,69 @@ public class Bill implements Serializable {
         addMenuItem(menuItemList.get(arguments.get(0)),arguments.get(1));
         return 1;
     }
+
+    /**
+     * delete menu item in bill
+     *
+     * @param deletedItem MenuItem need to delete
+     * @return true if deleted successfully, false if MenuItem not existed
+     */
+    public boolean deleteMenuItem(MenuItem deletedItem) {
+        if (menuItems.containsKey(deletedItem)) {
+            menuItems.remove(deletedItem);
+            this.orderedTime = LocalDateTime.now();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * delete menu item in bill
+     *
+     * @param itemsIndex index of item in bill
+     * @return true if delete successfully, false if index out of bound
+     */
+    public boolean deleteMenuItem(int itemsIndex) {
+        MenuItem deletedItem;
+        List keys = new ArrayList(menuItems.keySet());
+        try {
+            deletedItem = (MenuItem) keys.get(itemsIndex);
+        }
+        catch (RuntimeException e){
+            return false;
+        }
+        return deleteMenuItem(deletedItem);
+    }
+
+    /**
+     * update menu item in bill
+     *
+     * @param menu MenuItem need to update
+     * @param quantity updated quantity of menu item
+     */
+    public void updateMenuItem(MenuItem menu, int quantity) {
+        if (menuItems.containsKey(menu)) {
+            menuItems.replace(menu, quantity);
+        } else {
+            menuItems.put(menu, quantity);
+        }
+        this.orderedTime = LocalDateTime.now();
+    }
+
+    public String getInfo() {
+        return "Bill{" + "orderedTime=" + orderedTime + "}";
+    }
+
+
+    /**
+     * update menuItem in bill with string {index}-{quantity}
+     *
+     * @param menuItem string index of menu + quantity of menuitem {index}-{quantity}
+     *                 with index is index of menu item in menu list
+     * @param menuItemList list of all menu items in program
+     * @return 1 update successfully, 0 index of menu item not existed on menuItemList,
+     * -1 if menuItem string wrong format
+     */
     public int updateMenuItem(String menuItem, List<MenuItem> menuItemList) {
         List<Integer> arguments=checkFormat(menuItem);
         if (arguments == null) {
@@ -98,6 +150,12 @@ public class Bill implements Serializable {
         return 1;
     }
 
+    /**
+     * check format of string menuItem {index-quantity}
+     *
+     * @param menuItem string of menuItem {index-quantity}
+     * @return true if true format, false if wrong format
+     */
     private List<Integer> checkFormat(String menuItem) {
         int menuIndex, quantity;
         String[] items = menuItem.split("-");
@@ -116,18 +174,5 @@ public class Bill implements Serializable {
         return new ArrayList<Integer>(
                 Arrays.asList(menuIndex, quantity));
     }
-
-    public boolean deleteMenuItem(int itemsIndex) {
-        MenuItem deletedItem;
-        List keys = new ArrayList(menuItems.keySet());
-        try {
-            deletedItem = (MenuItem) keys.get(itemsIndex);
-        }
-        catch (RuntimeException e){
-            return false;
-        }
-        return deleteMenuItem(deletedItem);
-    }
-
 
 }
