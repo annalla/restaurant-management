@@ -21,14 +21,17 @@ On your command line, you need to change directory where contains pom.xml file.
 
 Build the project:
 
+  ```sh
 $ mvn package
-
+  ```
 
 ### Executing program
 
 Execute the project:
 
-$ java -cp target/restaurant-management-1.0-SNAPSHOT.jar views.Program
+  ```sh
+ $ java -cp target/restaurant-management-1.0-SNAPSHOT.jar views.Program
+  ```
 
 ## Authors
 
