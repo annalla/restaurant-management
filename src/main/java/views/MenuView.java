@@ -124,11 +124,9 @@ public class MenuView {
      */
     public void deleteAMenuItem() {
         System.out.println(Message.DELETE_A_MENUITEM);
-        if(MenuManagement.checkMenuData()){
-
+        if (MenuManagement.checkMenuData()) {
             int indexMenu;
             printMenuItemList();
-
             boolean flag = true;
             while (flag) {
                 System.out.println(Message.INPUT_INDEX_MENU);
@@ -140,7 +138,6 @@ public class MenuView {
                         if (!isContinue()) {
                             flag = false;
                         }
-
                     } else {
                         System.out.println(Message.SUCCESS);
                         stopScreen();
@@ -153,8 +150,7 @@ public class MenuView {
                     System.out.println(Message.WRONG_INPUT);
                 }
             }
-        }
-        else{
+        } else {
             System.out.println(Message.NO_DATA);
             stopScreen();
         }
@@ -284,43 +280,47 @@ public class MenuView {
      */
     public void updateAMenuItem() {
         System.out.println(Message.UPDATE_A_MENUITEM);
+        if (MenuManagement.checkMenuData()) {
+            int selectedMenu = printAMenuItem();
+            int choice;
+            boolean flag = true;
 
-        int selectedMenu = printAMenuItem();
-        int choice;
-        boolean flag = true;
-
-        while (flag) {
-            System.out.println(Message.UPDATE_MENU_ITEM_MENU);
-            System.out.println(Message.INPUT_CHOICE);
-            try {
-                choice = scanner.nextInt();
-                switch (choice) {
-                    case MenuViewConstant.UPDATE_NAME_INDEX:
-                        updateNameMenuItem(selectedMenu);
-                        break;
-                    case MenuViewConstant.UPDATE_DESCRIPTION_INDEX:
-                        updateDescriptionMenuItem(selectedMenu);
-                        break;
-                    case MenuViewConstant.UPDATE_IMAGE_INDEX:
-                        updateImageMenuItem(selectedMenu);
-                        break;
-                    case MenuViewConstant.UPDATE_PRICE_INDEX:
-                        updatePriceMenuItem(selectedMenu);
-                        break;
-                    case MenuViewConstant.UPDATE_MORE_INDEX:
-                        updateAMenuItemWithProperties(selectedMenu);
-                        break;
-                    case MenuViewConstant.UPDATE_BACK:
-                        flag = false;
-                        break;
-                    default:
-                        System.out.println(Message.CHOICE_NOT_EXISTED);
+            while (flag) {
+                System.out.println(Message.UPDATE_MENU_ITEM_MENU);
+                System.out.println(Message.INPUT_CHOICE);
+                try {
+                    choice = scanner.nextInt();
+                    switch (choice) {
+                        case MenuViewConstant.UPDATE_NAME_INDEX:
+                            updateNameMenuItem(selectedMenu);
+                            break;
+                        case MenuViewConstant.UPDATE_DESCRIPTION_INDEX:
+                            updateDescriptionMenuItem(selectedMenu);
+                            break;
+                        case MenuViewConstant.UPDATE_IMAGE_INDEX:
+                            updateImageMenuItem(selectedMenu);
+                            break;
+                        case MenuViewConstant.UPDATE_PRICE_INDEX:
+                            updatePriceMenuItem(selectedMenu);
+                            break;
+                        case MenuViewConstant.UPDATE_MORE_INDEX:
+                            updateAMenuItemWithProperties(selectedMenu);
+                            break;
+                        case MenuViewConstant.UPDATE_BACK:
+                            flag = false;
+                            break;
+                        default:
+                            System.out.println(Message.CHOICE_NOT_EXISTED);
+                    }
+                } catch (RuntimeException e) {
+                    logger.fatal("updateAMenuItem() - " + e);
+                    scanner.nextLine();
+                    System.out.println(Message.WRONG_INPUT);
                 }
-            } catch (RuntimeException e) {
-                logger.fatal("updateAMenuItem() - " + e);
-                scanner.nextLine();
-                System.out.println(Message.WRONG_INPUT);
             }
+        } else {
+            System.out.println(Message.NO_DATA);
+            stopScreen();
         }
     }
 
@@ -361,7 +361,11 @@ public class MenuView {
      */
     public void displayAMenuItem() {
         System.out.println(Message.DISPLAY_A_MENUITEM);
-        printAMenuItem();
+        if (MenuManagement.checkMenuData()) {
+            printAMenuItem();
+        } else {
+            System.out.println(Message.NO_DATA);
+        }
         stopScreen();
     }
 
@@ -375,7 +379,7 @@ public class MenuView {
         }
         System.out.println(Message.HEADER_MENU_LIST);
         for (int i = 0; i < MenuManagement.menuList.size(); i++) {
-            System.out.println(i + "\t\t\t" + MenuManagement.getBasicMenuInfo(i));
+            System.out.println(String.format("%-10d%s",i,MenuManagement.getBasicMenuInfo(i)));
         }
     }
 
@@ -409,7 +413,7 @@ public class MenuView {
             if (!f.exists()) {
                 System.out.println(Message.NO_DATA);
             }
-            FileInputStream is = new FileInputStream(MainView.dataDirectory + "//" +MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
+            FileInputStream is = new FileInputStream(MainView.dataDirectory + "//" + MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
             ObjectInputStream ois = new ObjectInputStream(is);
             List<MenuItem> items = (List<MenuItem>) ois.readObject();
             MenuManagement.setMenuList(items);
@@ -438,7 +442,7 @@ public class MenuView {
             }
             File myObj = new File(MainView.dataDirectory + "//" + MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
             myObj.createNewFile();
-            FileOutputStream fos = new FileOutputStream(MainView.dataDirectory + "//" +MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
+            FileOutputStream fos = new FileOutputStream(MainView.dataDirectory + "//" + MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             // write object to file
             oos.writeObject(MenuManagement.menuList);

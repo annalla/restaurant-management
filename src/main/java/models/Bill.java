@@ -24,9 +24,10 @@ public class Bill implements Serializable {
                 "orderedTime=" + orderedTime +
                 '}');
         int i = 0;
-        result.append("\nMenu Items (name-type-quantity):");
+        result.append("\nMenu Items:");
+        result.append(String.format("\n%-10s%-50s%-25s%-20s%-20s","index","name","type","price","quantity"));
         for (Map.Entry<MenuItem, Integer> entry : menuItems.entrySet()) {
-            result.append("\n\t").append(i).append(". ").append(entry.getKey().getName()).append("\t\t").append(entry.getKey().getMenuType()).append("\t\t").append(entry.getValue());
+            result.append(String.format("\n%-10d%-50s%-25s%-20.2f%-20d",i,entry.getKey().getName(),entry.getKey().getMenuType(),entry.getKey().getPrice(),entry.getValue()));
             i++;
         }
         return result.toString();

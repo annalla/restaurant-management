@@ -26,7 +26,7 @@ public class Message {
     public static final String GET_MENU_ITEMS = "8. Get menu data---------------------------";
     public static final String SAVE_MENU_ITEMS = "9. Save menu data---------------------------";
     public static final String UPDATE_MENU_ITEM_MENU = "1. Update name\n2. Update description\n3. Update image url\n4. Update price\n5. Update more than one property\n6. Back ";
-    public static final String HEADER_MENU_LIST = "index\t\tname\t\t\tMenuType\t\t\tprice";
+    public static final String HEADER_MENU_LIST = String.format("%-10s%-50s%-25s%-20s","index","name","MenuType","price");
 
     public static final String SUCCESS = "Succeeded";
     public static final String FAILED = "Failed";

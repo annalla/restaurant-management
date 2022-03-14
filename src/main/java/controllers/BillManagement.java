@@ -14,10 +14,9 @@ import java.util.List;
 public class BillManagement {
     private static final Logger logger = LogManager.getLogger(BillManagement.class);
 
-    public static List<Bill> bills;
+    public static List<Bill> bills=new ArrayList<>();
 
     public BillManagement() {
-        bills = new ArrayList<>();
     }
 
     public void setBills(List<Bill> bills) {

@@ -16,11 +16,10 @@ public class MenuManagement {
 
     private static final Logger logger = LogManager.getLogger(MenuManagement.class);
 
-    public static List<MenuItem> menuList;
+    public static List<MenuItem> menuList=new ArrayList<>();
     public static HashMap<MenuType, List<MenuType>> menu;
 
     public MenuManagement() {
-        menuList = new ArrayList<>();
     }
 
     public static void setMenuList(List<MenuItem> menuList) {
@@ -246,7 +245,7 @@ public class MenuManagement {
 
     public static boolean checkMenuData() {
         try {
-            return menuList.size() != 0;
+            return MenuManagement.menuList.size() != 0;
         }
         catch (RuntimeException e){
             return false;

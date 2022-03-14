@@ -65,7 +65,7 @@ public class BillView {
      */
     public void deleteBill() {
         System.out.println(Message.DELETE_A_BILL);
-        if(BillManagement.checkBillData()){
+        if (BillManagement.checkBillData()) {
             int indexBill;
             printBillList();
 
@@ -93,8 +93,7 @@ public class BillView {
                     System.out.println(Message.WRONG_INPUT);
                 }
             }
-        }
-        else{
+        } else {
             System.out.println(Message.NO_DATA);
             stopScreen();
         }
@@ -109,35 +108,40 @@ public class BillView {
      */
     public void updateBill() {
         System.out.println(Message.UPDATE_A_BILL);
-        int selectedBill = printBill();
-        int choice;
-        boolean flag = true;
+        if (BillManagement.checkBillData()) {
+            int selectedBill = printBill();
+            int choice;
+            boolean flag = true;
 
-        while (flag) {
-            System.out.println(Message.UPDATE_BILL_MENU);
-            System.out.println(Message.INPUT_CHOICE);
-            try {
-                choice = scanner.nextInt();
-                switch (choice) {
-                    case BillViewConstant.UPDATE_BY_ADD_MENUITEM_INDEX:
-                        updateByAddMenuItem(selectedBill);
-                        break;
-                    case BillViewConstant.UPDATE_BY_DELETE_MENUITEM_INDEX:
-                        updateByDeleteMenuItem(selectedBill);
-                        break;
-                    case BillViewConstant.UPDATE_QUANTITY_MENUITEM_INDEX:
-                        updateQuantityMenuItem(selectedBill);
-                        break;
-                    case BillViewConstant.UPDATE_BACK:
-                        flag = false;
-                        break;
-                    default:
-                        System.out.println(Message.CHOICE_NOT_EXISTED);
+            while (flag) {
+                System.out.println(Message.UPDATE_BILL_MENU);
+                System.out.println(Message.INPUT_CHOICE);
+                try {
+                    choice = scanner.nextInt();
+                    switch (choice) {
+                        case BillViewConstant.UPDATE_BY_ADD_MENUITEM_INDEX:
+                            updateByAddMenuItem(selectedBill);
+                            break;
+                        case BillViewConstant.UPDATE_BY_DELETE_MENUITEM_INDEX:
+                            updateByDeleteMenuItem(selectedBill);
+                            break;
+                        case BillViewConstant.UPDATE_QUANTITY_MENUITEM_INDEX:
+                            updateQuantityMenuItem(selectedBill);
+                            break;
+                        case BillViewConstant.UPDATE_BACK:
+                            flag = false;
+                            break;
+                        default:
+                            System.out.println(Message.CHOICE_NOT_EXISTED);
+                    }
+                } catch (RuntimeException e) {
+                    logger.fatal("updateBill() - " + e);
+                    scanner.nextLine();
                 }
-            } catch (RuntimeException e) {
-                logger.fatal("updateBill() - " + e);
-                scanner.nextLine();
             }
+        } else {
+            System.out.println(Message.NO_DATA);
+            stopScreen();
         }
     }
 
@@ -239,8 +243,12 @@ public class BillView {
      */
     public void displayBill() {
         System.out.println(Message.DISPLAY_A_BILL);
-        printBill();
-        scanner.nextLine();
+        if (BillManagement.checkBillData()) {
+            printBill();
+            scanner.nextLine();
+        } else {
+            System.out.println(Message.NO_DATA);
+        }
         stopScreen();
     }
 
@@ -273,7 +281,7 @@ public class BillView {
         }
         System.out.println(Message.HEADER_MENU_LIST);
         for (int i = 0; i < MenuManagement.menuList.size(); i++) {
-            System.out.println(i + ".\t\t\t" + MenuManagement.getBasicMenuInfo(i));
+            System.out.println(String.format("%-10d%s",i,MenuManagement.getBasicMenuInfo(i)));
         }
     }
 
@@ -283,7 +291,7 @@ public class BillView {
     public void displayMain() {
         int choice;
         boolean flag = true;
-        if (!MenuManagement.checkMenuData()) {
+        if (!MenuManagement.checkMenuData()&&!BillManagement.checkBillData()) {
             System.out.println(Message.NO_DATA_MENU);
             stopScreen();
             new MenuView().displayMain();
@@ -348,9 +356,9 @@ public class BillView {
             if (!theDir.exists()) {
                 theDir.mkdirs();
             }
-            File myObj = new File(MainView.dataDirectory + "//" +BillViewConstant.FILE_NAME_BILL_DATA);
+            File myObj = new File(MainView.dataDirectory + "//" + BillViewConstant.FILE_NAME_BILL_DATA);
             myObj.createNewFile();
-            FileOutputStream fos = new FileOutputStream(MainView.dataDirectory + "//" +BillViewConstant.FILE_NAME_BILL_DATA);
+            FileOutputStream fos = new FileOutputStream(MainView.dataDirectory + "//" + BillViewConstant.FILE_NAME_BILL_DATA);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             // write object to file
             oos.writeObject(BillManagement.bills);
@@ -373,11 +381,11 @@ public class BillView {
     private void getBillData() {
         System.out.println(Message.GET_BILLS);
         try {
-            File f = new File(MainView.dataDirectory+"//"+BillViewConstant.FILE_NAME_BILL_DATA);
+            File f = new File(MainView.dataDirectory + "//" + BillViewConstant.FILE_NAME_BILL_DATA);
             if (!f.exists()) {
                 System.out.println(Message.NO_DATA);
             }
-            FileInputStream is = new FileInputStream(MainView.dataDirectory+"//"+BillViewConstant.FILE_NAME_BILL_DATA);
+            FileInputStream is = new FileInputStream(MainView.dataDirectory + "//" + BillViewConstant.FILE_NAME_BILL_DATA);
             ObjectInputStream ois = new ObjectInputStream(is);
             List<Bill> items = (List<Bill>) ois.readObject();
             billManagement.setBills(items);

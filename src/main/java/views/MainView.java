@@ -21,7 +21,6 @@ public class MainView {
 
     /**
      * Display main view of program
-     *
      */
     public void displayMainView() {
 

@@ -131,7 +131,7 @@ public abstract class MenuItem implements Serializable {
     }
 
     public String getBasicInfor() {
-        return name + "\t\t\t" + getMenuType() + "\t\t\t" + price;
+        return String.format("%-50s%-25s%-20.2f",name,getMenuType(),price);
     }
 
     /**
