@@ -1,6 +1,5 @@
 menuType,name,description,image,price
 LunchMenu,lunch1,rice,rice.jpg,4.5
-DrinkMenu,dinner1,beef,sb.jpg,6.9
 BreakfastMenu,breakfast1,bread,bread.jpg,4.6
 SoftDrinkMenu,softdrink1,coca,coca.jpg,3.0
 AlcoholMenu,beer,beer,beer.jpg,2.4

@@ -65,8 +65,7 @@ public class MenuManagement {
      * @return index of menu in menuList or a negative if not succeeded
      */
     public boolean addMenuItem(MenuType type, String name, String description, String img, double price) {
-        if (!checkExistedMenuItemName(name))
-        {
+        if (!checkExistedMenuItemName(name)) {
             MenuItem menuItem = MenuItemFactory.createMenuItem(type, name, description, img, price);
             if (menuItem != null) {
                 menuList.add(menuItem);
@@ -83,8 +82,8 @@ public class MenuManagement {
      * @return true if existed name, false if not
      */
     private boolean checkExistedMenuItemName(String name) {
-        for(MenuItem menuItem:menuList){
-            if(name.equals(menuItem.getName())){
+        for (MenuItem menuItem : menuList) {
+            if (name.equals(menuItem.getName())) {
                 return true;
             }
         }
@@ -268,6 +267,7 @@ public class MenuManagement {
      * @throws IOException
      */
     public static int getMenuData() {
+        ArrayList<MenuItem> newMenu = new ArrayList<>();
         try {
             File f = new File(MainView.dataDirectory + "//" + MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
             if (!f.exists()) {
@@ -281,21 +281,22 @@ public class MenuManagement {
                 while ((line = br.readLine()) != null) {
                     MenuItem menuItem = convertCsvLine(line);
                     if (menuItem != null) {
-                        menuList.add(menuItem);
+                        newMenu.add(menuItem);
                     }
                 }
+                menuList = newMenu;
+                return 1;
 
             } catch (IOException e) {
-                e.printStackTrace();
+                return -1;
             } finally {
                 try {
                     if (br != null)
                         br.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    return -1;
                 }
             }
-            return 1;
 
         } catch (Exception e) {
             logger.fatal("getMenuData() - " + e);

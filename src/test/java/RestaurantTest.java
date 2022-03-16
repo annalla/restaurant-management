@@ -88,37 +88,37 @@ public class RestaurantTest {
 
         //add Bill
 
-        int id1 = billManagement.addBill();
-
-        Assert.assertTrue(1 == billManagement.addMenuItemIntoBill("1-4", id1));
-        Assert.assertTrue(1 == billManagement.addMenuItemIntoBill("1-2", id1));
-        Assert.assertTrue(1 == billManagement.addMenuItemIntoBill("2-5", id1));
-        MenuItem menuItem2 = new BreakfastMenuItem("bread", "bread,egg,salad", "c://image2.jpg", 2.3);
-        MenuItem menuItem3 = new DinnerMenuItem("noodle", "beef,noodle,vegetable", "c://image3.jpg", 7.3);
-        Map<MenuItem, Integer> expectedMenuItems = new LinkedHashMap<>();
-        expectedMenuItems.put(menuItem2, 6);
-        expectedMenuItems.put(menuItem3, 5);
-        Assert.assertEquals(expectedMenuItems, billManagement.getBill(0).getMenuItems());
-
-        //update
-        billManagement.updateBillByUpdateItem("0-10", id1);
-        Map<MenuItem, Integer> expectedUpdatedByUpdateQuantityMenuItems = new LinkedHashMap<>();
-        expectedUpdatedByUpdateQuantityMenuItems.put(menuItem2, 10);
-        expectedUpdatedByUpdateQuantityMenuItems.put(menuItem3, 5);
-        Assert.assertEquals(expectedUpdatedByUpdateQuantityMenuItems, billManagement.getBill(0).getMenuItems());
-
-        billManagement.updateBillByDeleteItem(0, id1);
-        Map<MenuItem, Integer> expectedUpdatedByDeletedMenuItems = new LinkedHashMap<>();
-        expectedUpdatedByDeletedMenuItems.put(menuItem3, 5);
-        Assert.assertEquals(expectedUpdatedByDeletedMenuItems, billManagement.getBill(0).getMenuItems());
-
-        //display a bill
-
-        String displayBill = billManagement.displayBill(0);
-        System.out.println("Display a bill:" + displayBill);
-        //deleteBill
-        billManagement.deleteBill(0);
-        Assert.assertEquals(BillManagement.bills.size(), 0);
+//        int id1 = billManagement.addBill();
+//
+//        Assert.assertTrue(1 == billManagement.addMenuItemIntoBill("1-4", id1));
+//        Assert.assertTrue(1 == billManagement.addMenuItemIntoBill("1-2", id1));
+//        Assert.assertTrue(1 == billManagement.addMenuItemIntoBill("2-5", id1));
+//        MenuItem menuItem2 = new BreakfastMenuItem("bread", "bread,egg,salad", "c://image2.jpg", 2.3);
+//        MenuItem menuItem3 = new DinnerMenuItem("noodle", "beef,noodle,vegetable", "c://image3.jpg", 7.3);
+//        Map<MenuItem, Integer> expectedMenuItems = new LinkedHashMap<>();
+//        expectedMenuItems.put(menuItem2, 6);
+//        expectedMenuItems.put(menuItem3, 5);
+//        Assert.assertEquals(expectedMenuItems, billManagement.getBill(0).getMenuItems());
+//
+//        //update
+//        billManagement.updateBillByUpdateItem("0-10", id1);
+//        Map<MenuItem, Integer> expectedUpdatedByUpdateQuantityMenuItems = new LinkedHashMap<>();
+//        expectedUpdatedByUpdateQuantityMenuItems.put(menuItem2, 10);
+//        expectedUpdatedByUpdateQuantityMenuItems.put(menuItem3, 5);
+//        Assert.assertEquals(expectedUpdatedByUpdateQuantityMenuItems, billManagement.getBill(0).getMenuItems());
+//
+//        billManagement.updateBillByDeleteItem(0, id1);
+//        Map<MenuItem, Integer> expectedUpdatedByDeletedMenuItems = new LinkedHashMap<>();
+//        expectedUpdatedByDeletedMenuItems.put(menuItem3, 5);
+//        Assert.assertEquals(expectedUpdatedByDeletedMenuItems, billManagement.getBill(0).getMenuItems());
+//
+//        //display a bill
+//
+//        String displayBill = billManagement.displayBill(0);
+//        System.out.println("Display a bill:" + displayBill);
+//        //deleteBill
+//        billManagement.deleteBill(0);
+//        Assert.assertEquals(BillManagement.bills.size(), 0);
 
     }
 }

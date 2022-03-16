@@ -219,7 +219,6 @@ public class BillManagement {
             return true;
 
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
         finally {
@@ -251,7 +250,6 @@ public class BillManagement {
             setBills(items);
             return 1;
         } catch (Exception e) {
-            e.printStackTrace();
             return -1;
         }
         finally {
