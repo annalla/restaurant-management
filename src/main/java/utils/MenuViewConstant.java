@@ -1,7 +1,7 @@
 package utils;
 
 public class MenuViewConstant {
-    public static final String FILE_NAME_MENU_ITEM_DATA="menu_item_list.bin";
+    public static final String FILE_NAME_MENU_ITEM_DATA="menu_item_list.csv";
     public static final int ADD_MENUITEM_INDEX = 1;
     public static final int DELETE_MENUITEM_INDEX = 2;
     public static final int UPDATE_MENUITEM_INDEX = 3;

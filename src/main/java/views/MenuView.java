@@ -74,10 +74,10 @@ public class MenuView {
 
         while (flag) {
             try {
-                System.out.println(Message.CHOOSE_TYPE_MENU);
                 select = scanner.nextInt();
                 scanner.nextLine();
                 if (menuSelectMenuType.containsKey(select)) {
+                    System.out.println(Message.CHOOSE_TYPE_MENU);
                     System.out.println(Message.INPUT_NAME);
                     name = scanner.nextLine();
                     while (name.length() == 0) {
@@ -105,8 +105,16 @@ public class MenuView {
                             System.out.println(Message.WRONG_INPUT);
                         }
                     }
-                    menuManagement.addMenuItem(menuSelectMenuType.get(select), name, description, image, price);
-                    flag = false;
+                    if(menuManagement.addMenuItem(menuSelectMenuType.get(select), name, description, image, price)){
+                        flag = false;
+                        System.out.println(Message.SUCCESS);
+                    }
+                    else {
+                        System.out.println(Message.EXISTED_NAME);
+                        System.out.println(Message.FAILED);
+                        stopScreen();
+                    }
+
                 } else {
                     System.out.println(Message.CHOICE_NOT_EXISTED);
                 }
@@ -379,7 +387,7 @@ public class MenuView {
         }
         System.out.println(Message.HEADER_MENU_LIST);
         for (int i = 0; i < MenuManagement.menuList.size(); i++) {
-            System.out.println(String.format("%-10d%s",i,MenuManagement.getBasicMenuInfo(i)));
+            System.out.println(String.format("%-10d%s", i, MenuManagement.getBasicMenuInfo(i)));
         }
     }
 
@@ -406,57 +414,34 @@ public class MenuView {
     /**
      * Get data of all menu items in menu List in file
      */
-    public void getMenuItemData() {
+    public static void getMenuItemData() {
         System.out.println(Message.GET_MENU_ITEMS);
-        try {
-            File f = new File(MainView.dataDirectory + "//" + MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
-            if (!f.exists()) {
+        switch (MenuManagement.getMenuData()){
+            case -1:
+                System.out.println(Message.GET_DATA_FAILED);
+                break;
+            case 0:
                 System.out.println(Message.NO_DATA);
-            }
-            FileInputStream is = new FileInputStream(MainView.dataDirectory + "//" + MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
-            ObjectInputStream ois = new ObjectInputStream(is);
-            List<MenuItem> items = (List<MenuItem>) ois.readObject();
-            MenuManagement.setMenuList(items);
-            ois.close();
-            is.close();
-            System.out.println(Message.SUCCESS);
-            stopScreen();
-        } catch (Exception e) {
-            logger.fatal("getMenuItemData() - " + e);
-            System.out.println(Message.GET_DATA_FAILED);
-            stopScreen();
+                break;
+            case 1:
+                System.out.println(Message.SUCCESS);
+                break;
         }
-
+        stopScreen();
     }
 
     /**
      * Save data of all menu items in menu List in file
      */
-    public void saveMenuItemData() {
+    public void saveMenuItemData() throws IOException {
         System.out.println(Message.SAVE_MENU_ITEMS);
-
-        try {
-            File theDir = new File(MainView.dataDirectory);
-            if (!theDir.exists()) {
-                theDir.mkdirs();
-            }
-            File myObj = new File(MainView.dataDirectory + "//" + MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
-            myObj.createNewFile();
-            FileOutputStream fos = new FileOutputStream(MainView.dataDirectory + "//" + MenuViewConstant.FILE_NAME_MENU_ITEM_DATA);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            // write object to file
-            oos.writeObject(MenuManagement.menuList);
-            // closing resources
-            oos.close();
-            fos.close();
+        if (MenuManagement.saveMenuData()) {
             System.out.println(Message.SUCCESS);
-
-            stopScreen();
-        } catch (IOException e) {
-            logger.fatal("saveMenuItemData() - " + e);
-            System.out.println(Message.SAVE_DATA_FAILED);
-            stopScreen();
         }
+        else{
+            System.out.println(Message.SAVE_DATA_FAILED);
+        }
+        stopScreen();
     }
 
     /**
@@ -516,7 +501,7 @@ public class MenuView {
                         stopScreen();
                 }
 
-            } catch (RuntimeException e) {
+            } catch (RuntimeException | IOException e) {
                 logger.fatal("displayMain() - " + e);
                 System.out.println(Message.WRONG_INPUT);
                 scanner.nextLine();

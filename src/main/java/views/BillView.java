@@ -49,7 +49,7 @@ public class BillView {
             if (addStatus == -1) {
                 System.out.println(Message.WRONG_FORMAT);
             } else if (addStatus == 0) {
-                System.out.println(Message.INDEX_OUT_OF_BOUND);
+                System.out.println(Message.INDEX_NOT_EXISTED);
             } else {
                 System.out.println(Message.SUCCESS);
             }
@@ -163,7 +163,7 @@ public class BillView {
             if (updatedStatus == -1) {
                 System.out.println(Message.WRONG_FORMAT);
             } else if (updatedStatus == 0) {
-                System.out.println(Message.INDEX_OUT_OF_BOUND);
+                System.out.println(Message.INDEX_NOT_EXISTED);
             } else {
                 System.out.println(Message.SUCCESS);
                 System.out.println(billManagement.displayBill(selectedBill));
@@ -336,7 +336,7 @@ public class BillView {
                         stopScreen();
                 }
 
-            } catch (RuntimeException e) {
+            } catch (RuntimeException | IOException e) {
                 logger.fatal(" displayMain()" + e);
                 scanner.nextLine();
                 System.out.println(Message.WRONG_INPUT);
@@ -348,59 +348,35 @@ public class BillView {
     /**
      * Save data of all bills in bill List in file
      */
-    private void saveBillData() {
+    private void saveBillData() throws IOException {
         System.out.println(Message.SAVE_BILLS);
-
-        try {
-            File theDir = new File(MainView.dataDirectory);
-            if (!theDir.exists()) {
-                theDir.mkdirs();
-            }
-            File myObj = new File(MainView.dataDirectory + "//" + BillViewConstant.FILE_NAME_BILL_DATA);
-            myObj.createNewFile();
-            FileOutputStream fos = new FileOutputStream(MainView.dataDirectory + "//" + BillViewConstant.FILE_NAME_BILL_DATA);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            // write object to file
-            oos.writeObject(BillManagement.bills);
-            // closing resources
-            oos.close();
-            fos.close();
+        if(billManagement.saveBillData()){
             System.out.println(Message.SUCCESS);
-            stopScreen();
             scanner.nextLine();
-        } catch (IOException e) {
-            logger.fatal("saveBillData() - " + e);
-            System.out.println(Message.SAVE_DATA_FAILED);
-            stopScreen();
         }
+        else{
+            System.out.println(Message.SAVE_DATA_FAILED);
+        }
+        stopScreen();
     }
 
     /**
      * Get data of all bills in bill List in file
      */
-    private void getBillData() {
+    private void getBillData() throws IOException {
         System.out.println(Message.GET_BILLS);
-        try {
-            File f = new File(MainView.dataDirectory + "//" + BillViewConstant.FILE_NAME_BILL_DATA);
-            if (!f.exists()) {
+        switch (billManagement.getBillData()){
+            case -1:
+                System.out.println(Message.GET_DATA_FAILED);
+                break;
+            case 0:
                 System.out.println(Message.NO_DATA);
-            }
-            FileInputStream is = new FileInputStream(MainView.dataDirectory + "//" + BillViewConstant.FILE_NAME_BILL_DATA);
-            ObjectInputStream ois = new ObjectInputStream(is);
-            List<Bill> items = (List<Bill>) ois.readObject();
-            billManagement.setBills(items);
-            ois.close();
-            is.close();
-            System.out.println(Message.SUCCESS);
-            scanner.nextLine();
-            stopScreen();
-        } catch (Exception e) {
-            logger.fatal("getBillData() - " + e);
-            scanner.nextLine();
-            System.out.println(Message.GET_DATA_FAILED);
-            stopScreen();
-
+                break;
+            case 1:
+                System.out.println(Message.SUCCESS);
+                break;
         }
-
+        scanner.nextLine();
+        stopScreen();
     }
 }

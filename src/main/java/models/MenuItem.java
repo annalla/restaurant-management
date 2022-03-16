@@ -19,7 +19,12 @@ public abstract class MenuItem implements Serializable {
         this.image = image;
         this.price = price < 0 ? 0 : price;
     }
-
+    public MenuItem(MenuItem menuItem){
+        this.name = menuItem.name;
+        this.description = menuItem.description;
+        this.image = menuItem.image;
+        this.price = menuItem.price;
+    }
     public MenuType getMenuType() {
         return menuType;
     }

@@ -1,6 +1,7 @@
 package views;
 
 
+import controllers.MenuManagement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utils.MainViewConstant;
@@ -23,7 +24,7 @@ public class MainView {
      * Display main view of program
      */
     public void displayMainView() {
-
+        MenuManagement.getMenuData();
         int choice;
         while (true) {
             System.out.println(Message.MAIN_VIEW_MENU);

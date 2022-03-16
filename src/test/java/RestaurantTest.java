@@ -2,7 +2,7 @@ import controllers.BillManagement;
 import controllers.MenuManagement;
 import models.*;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -11,11 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 public class RestaurantTest {
-    public static List<MenuItem> expectedMenuItemList = new ArrayList<>();
-    public static MenuManagement menuManagement = new MenuManagement();
+    public List<MenuItem> expectedMenuItemList = new ArrayList<>();
+    public MenuManagement menuManagement = new MenuManagement();
+    public BillManagement billManagement = new BillManagement();
 
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
         MenuItem menuItem1 = new LunchMenuItem("rice", "rice,...", "c://image1.jpg", 3.3);
         MenuItem menuItem2 = new BreakfastMenuItem("bread", "bread,egg,salad", "c://image2.jpg", 2.3);
         MenuItem menuItem3 = new DinnerMenuItem("noodle", "beef,noodle,vegetable", "c://image3.jpg", 7.3);
@@ -43,81 +44,81 @@ public class RestaurantTest {
         Assert.assertArrayEquals(expectedMenuItemList.toArray(), MenuManagement.menuList.toArray());
 
         //test update MenuItem intoRestaurant
-        menuManagement.updateMenuName("newPepsi",3);
+        menuManagement.updateMenuName("newPepsi", 3);
         MenuItem updatedMenuItem4 = new SoftDrinkMenuItem("newPepsi", "...", "c://image4.jpg", 1.4);
-        expectedMenuItemList.set(3,updatedMenuItem4);
+        expectedMenuItemList.set(3, updatedMenuItem4);
         Assert.assertArrayEquals(expectedMenuItemList.toArray(), MenuManagement.menuList.toArray());
 
-        menuManagement.updateMenuDescription("newDescription",3);
+        menuManagement.updateMenuDescription("newDescription", 3);
         MenuItem updatedDesMenuItem4 = new SoftDrinkMenuItem("newPepsi", "newDescription", "c://image4.jpg", 1.4);
-        expectedMenuItemList.set(3,updatedDesMenuItem4);
+        expectedMenuItemList.set(3, updatedDesMenuItem4);
         Assert.assertArrayEquals(expectedMenuItemList.toArray(), MenuManagement.menuList.toArray());
 
-        menuManagement.updateMenuImage("c://newImage4.jpg",3);
+        menuManagement.updateMenuImage("c://newImage4.jpg", 3);
         MenuItem updatedImgMenuItem4 = new SoftDrinkMenuItem("newPepsi", "newDescription", "c://newImage4.jpg", 1.4);
-        expectedMenuItemList.set(3,updatedImgMenuItem4);
+        expectedMenuItemList.set(3, updatedImgMenuItem4);
         Assert.assertArrayEquals(expectedMenuItemList.toArray(), MenuManagement.menuList.toArray());
 
-        menuManagement.updateMenuPrice(1.9,3);
+        menuManagement.updateMenuPrice(1.9, 3);
         MenuItem updatedPriceMenuItem4 = new SoftDrinkMenuItem("newPepsi", "newDescription", "c://newImage4.jpg", 1.9);
-        expectedMenuItemList.set(3,updatedPriceMenuItem4);
+        expectedMenuItemList.set(3, updatedPriceMenuItem4);
         Assert.assertArrayEquals(expectedMenuItemList.toArray(), MenuManagement.menuList.toArray());
 
-        menuManagement.updateMenuWithMoreProperties("newPepsi2-newDescription...--1.5",3);
+        menuManagement.updateMenuWithMoreProperties("newPepsi2-newDescription...--1.5", 3);
         MenuItem updatedSomePropertiesMenuItem4 = new SoftDrinkMenuItem("newPepsi2", "newDescription...", "c://newImage4.jpg", 1.5);
-        expectedMenuItemList.set(3,updatedSomePropertiesMenuItem4);
+        expectedMenuItemList.set(3, updatedSomePropertiesMenuItem4);
         Assert.assertArrayEquals(expectedMenuItemList.toArray(), MenuManagement.menuList.toArray());
 
         //test delete MenuItem in restaurant
         menuManagement.deleteMenu(0);
-        MenuItem deletedMenu=new LunchMenuItem("rice", "rice,...", "c://image1.jpg", 3.3);
+        MenuItem deletedMenu = new LunchMenuItem("rice", "rice,...", "c://image1.jpg", 3.3);
         expectedMenuItemList.remove(deletedMenu);
         Assert.assertArrayEquals(expectedMenuItemList.toArray(), MenuManagement.menuList.toArray());
 
         //test display
-        String menuItem4String=menuManagement.displayMenu(3);
-        String expectedMenuItem4="AlcoholMenu{name='strongbow', description='...', image='c://image5.jpg', price=1.3}";
-        Assert.assertEquals(expectedMenuItem4,menuItem4String);
-        System.out.println("Display a menu item:"+menuItem4String);
-        //test Bill
+        String menuItem4String = menuManagement.displayMenu(3);
+        String expectedMenuItem4 = "AlcoholMenu{name='strongbow', description='...', image='c://image5.jpg', price=1.3}";
+        Assert.assertEquals(expectedMenuItem4, menuItem4String);
+        System.out.println("Display a menu item:" + menuItem4String);
 
     }
+
     @Test
-    public void testBillManagement(){
+    public void testBillManagement() {
 
         //add Bill
-        BillManagement billManagement=new BillManagement();
-        int id1 =billManagement.addBill();
-        billManagement.addMenuItemIntoBill("1-4",id1);
-        billManagement.addMenuItemIntoBill("1-2",id1);
-        billManagement.addMenuItemIntoBill("2-5",id1);
 
+        int id1 = billManagement.addBill();
+
+        Assert.assertTrue(1 == billManagement.addMenuItemIntoBill("1-4", id1));
+        Assert.assertTrue(1 == billManagement.addMenuItemIntoBill("1-2", id1));
+        Assert.assertTrue(1 == billManagement.addMenuItemIntoBill("2-5", id1));
         MenuItem menuItem2 = new BreakfastMenuItem("bread", "bread,egg,salad", "c://image2.jpg", 2.3);
-        MenuItem menuItem3 = new DinnerMenuItem("noodle", "beef,noodle,vegetable", "c://image3.jpg",7.3);
-        Map<MenuItem,Integer> expectedMenuItems=new LinkedHashMap<>();
-        expectedMenuItems.put(menuItem2,6);
-        expectedMenuItems.put(menuItem3,5);
-        Assert.assertEquals(expectedMenuItems,billManagement.getBill(0).getMenuItems());
+        MenuItem menuItem3 = new DinnerMenuItem("noodle", "beef,noodle,vegetable", "c://image3.jpg", 7.3);
+        Map<MenuItem, Integer> expectedMenuItems = new LinkedHashMap<>();
+        expectedMenuItems.put(menuItem2, 6);
+        expectedMenuItems.put(menuItem3, 5);
+        Assert.assertEquals(expectedMenuItems, billManagement.getBill(0).getMenuItems());
 
         //update
-        billManagement.updateBillByUpdateItem("0-10",id1);
-        Map<MenuItem,Integer> expectedUpdatedByUpdateQuantityMenuItems=new LinkedHashMap<>();
-        expectedUpdatedByUpdateQuantityMenuItems.put(menuItem2,10);
-        expectedUpdatedByUpdateQuantityMenuItems.put(menuItem3,5);
-        Assert.assertEquals(expectedUpdatedByUpdateQuantityMenuItems,billManagement.getBill(0).getMenuItems());
+        billManagement.updateBillByUpdateItem("0-10", id1);
+        Map<MenuItem, Integer> expectedUpdatedByUpdateQuantityMenuItems = new LinkedHashMap<>();
+        expectedUpdatedByUpdateQuantityMenuItems.put(menuItem2, 10);
+        expectedUpdatedByUpdateQuantityMenuItems.put(menuItem3, 5);
+        Assert.assertEquals(expectedUpdatedByUpdateQuantityMenuItems, billManagement.getBill(0).getMenuItems());
 
-        billManagement.updateBillByDeleteItem(0,id1);
-        Map<MenuItem,Integer> expectedUpdatedByDeletedMenuItems=new LinkedHashMap<>();
-        expectedUpdatedByDeletedMenuItems.put(menuItem3,5);
-        Assert.assertEquals(expectedUpdatedByDeletedMenuItems,billManagement.getBill(0).getMenuItems());
+        billManagement.updateBillByDeleteItem(0, id1);
+        Map<MenuItem, Integer> expectedUpdatedByDeletedMenuItems = new LinkedHashMap<>();
+        expectedUpdatedByDeletedMenuItems.put(menuItem3, 5);
+        Assert.assertEquals(expectedUpdatedByDeletedMenuItems, billManagement.getBill(0).getMenuItems());
 
         //display a bill
 
-        String displayBill=billManagement.displayBill(0);
-        System.out.println("Display a bill:"+displayBill);
+        String displayBill = billManagement.displayBill(0);
+        System.out.println("Display a bill:" + displayBill);
         //deleteBill
         billManagement.deleteBill(0);
-        Assert.assertEquals(BillManagement.bills.size(),0);
+        Assert.assertEquals(BillManagement.bills.size(), 0);
 
     }
 }
