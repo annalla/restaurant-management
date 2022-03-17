@@ -19,7 +19,7 @@ Bills' management includes add, update, delete, display a bill, get/store all bi
 
 On your command line, you need to change directory where contains pom.xml file.
 
-Build the project:
+Build the project into jar file:
 
   ```sh
 $ mvn package
@@ -27,10 +27,16 @@ $ mvn package
 
 ### Executing program
 
-Execute the project:
+Execute the project with file jar:
 
   ```sh
- $ java -cp target/restaurant-management-1.0-SNAPSHOT.jar views.Program
+ $ java -jar target/restaurant-management-1.0-SNAPSHOT.jar
+  ```
+
+Or compile then execute project:
+
+  ```sh
+$ mvn compile exec:java
   ```
 
 ## Authors
